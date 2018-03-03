@@ -1,0 +1,26 @@
+{
+    "name": "discordbot-base",
+    "version": "1.0.0",
+    "description": "Discord's bot base with modules system.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Sapuraizu",
+    "license": "ISC",
+    "dependencies": {
+        "discord.js": "^11.1.0",
+        "libsodium-wrappers": "^0.5.2",
+        "module-alias": "^2.0.1",
+        "node-opus": "^0.2.6",
+        "string-argv": "0.0.2",
+        "uws": "^8.14.1"
+    },
+    "devDependencies": {
+        "@types/node": "^8.0.47"
+    },
+    "_moduleAliases": {
+        "@root": "./dist",
+        "@utils": "./dist/utils"
+    }
+}

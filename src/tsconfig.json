@@ -1,0 +1,20 @@
+{
+    "compileOnSave": true,
+    "include": [
+        "**/*"
+    ],
+    "compilerOptions": {
+        "allowJs": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "watch": true,
+        "removeComments": true,
+        "outDir": "../dist",
+        "target": "es2017",
+        "baseUrl": ".",
+        "paths": {
+            "@root/*": ["./*"],
+            "@utils/*": ["./utils/*"]
+        }
+    }
+}
