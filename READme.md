@@ -1,6 +1,6 @@
 # Discord Bot Base
 ## About
-DiscordBotBase is an unofficial framework written in TypeScript for [discord.js](https://github.com/discordjs/discord.js), it allow you to create a discord's bot with a base with the minimum of lines.
+DiscordBotBase is an unofficial framework written in TypeScript for [discord.js](https://github.com/discordjs/discord.js), it allow you to create a discord's bot with the minimum of lines.
 
 ## Features
 * Startup and global options
@@ -8,7 +8,9 @@ DiscordBotBase is an unofficial framework written in TypeScript for [discord.js]
 * Hot reload (commands from files only)
 
 ## Installation
-1. Install [TypeScript](https://www.typescriptlang.org/index.html#download-links).
+1. Install [NodeJS](https://nodejs.org/en/).
+2. Install [TypeScript](https://www.typescriptlang.org/index.html#download-links).
+3. Execute `npm install` where you have the `package.json`.
 
 ## Set-up first project
 1. Build and start watching of `src/` with `tsc -p src`.
@@ -36,4 +38,4 @@ $ node tests
 ```
 
 ## Contribution
-Anyone can contribute to this project and i will be happy if you also want to contact me on discord: Tanuki#0003.
+Anyone can contribute to this project and i will be happy if you also want to contact me on discord: **Tanuki#0003**.
