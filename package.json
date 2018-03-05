@@ -9,6 +9,7 @@
     "author": "Sapuraizu",
     "license": "ISC",
     "dependencies": {
+        "async-file": "^2.0.2",
         "discord.js": "^11.1.0",
         "libsodium-wrappers": "^0.5.2",
         "module-alias": "^2.0.1",
