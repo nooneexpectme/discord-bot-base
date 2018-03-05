@@ -1,7 +1,7 @@
 require("module-alias/register");
 
 import * as DiscordJS from "discord.js";
-import Commands from "./commands";
+import Commands, { CommandModel } from "./commands";
 
 import Logger, { Danger } from "@utils/logger";
 import ExecutionTime from "@utils/executionTime";
@@ -68,4 +68,4 @@ class Core {
     }
 }
 
-export { DiscordJS, Core };
+export { DiscordJS, Core, CommandModel };

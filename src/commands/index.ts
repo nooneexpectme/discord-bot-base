@@ -1,59 +1,71 @@
 import { Core as QueenDecimCore } from "@root/index";
 import * as DiscordJS from "discord.js";
 import * as StringArgv from "string-argv";
-import Logger from "@utils/logger";
+import Logger, { Danger, Success } from "@utils/logger";
+import { exists } from "async-file";
 
 export default class Commands {
     private core: QueenDecimCore;
-    private commands: {[name: string]: CommandEntry} = {};
+    private registry: string[]  = [];
+    private commands: {[name: string]: CommandModel} = {};
 
     constructor(core: QueenDecimCore){
         this.core = core;
 
         // Register commands from settings
-        if(core.settings.commands && core.settings.commands.length > 0){
-            for(let command of core.settings.commands){
-                let infos: CommandBaseInformations = command.infos();
-                this.register(infos.command, infos.description, command);
-            }
+        if(core.settings.commands && core.settings.commands.length > 0)
+            for(let commandPath of core.settings.commands)
+                this.register(commandPath);
+    }
+
+    // Register
+    public async registerOne(path: string): Promise<boolean> {
+        Logger(`<RegisterOne> Trying to register "${path}".`);
+        let errors = {
+            already_registered: this.registry.indexOf(path) > -1,
+            not_found: !(await exists(path))
+        };
+        if(errors.already_registered) Danger(`<RegisterOne> "${path}" Already registered.`);
+        else if(errors.not_found) Danger(`<RegisterOne> "${path}" not found.`);
+        else {
+            this.registry.push(path);
+            Success(`<RegisterOne> "${path}" registered.`);
+            return true;
         }
-
-        // Default command: help
-        this.register("help", "Show informations about all registered plugins.", class {
-            private core: QueenDecimCore;
-            constructor(core: QueenDecimCore){ this.core = core; }
-            async run(message: DiscordJS.Message, args: any[]){
-                message.reply("please try again in two years.");
-            }
-        })
+        return false;
     }
 
-    // Registr
-    public exists(name: string): boolean { return this.commands[name.toLowerCase()] !== undefined; }
-    public register(name: string, description: string, Manager: any): boolean {
-        if(this.exists(name)) return false;
-        Logger(`<Register command> ${name} - ${description}.`);
-        let command: CommandEntry = { name, description, instance: new Manager(this.core) };
-        this.commands[name.toLowerCase()] = command;
+    public async register(paths: string|string[]): Promise<boolean> {
+        if(!Array.isArray(paths)) paths = [paths];
+        let registers = await Promise.all(paths.map(path => this.registerOne(path)));
+        return registers.indexOf(true) > -1;
+    }
+
+    public unregister(path: string): boolean {
+        let pathIndex = this.registry.indexOf(path);
+        if(pathIndex === -1) return false
+        this.registry.splice(pathIndex, 1);
+        Logger(`<UnRegister> Unregistered path "${path}".`);
         return true;
     }
-    public unregister(name: string): boolean {
-        if(!this.exists(name)) return false
-        Logger(`<Unregister command> ${name}.`);
-        delete this.commands[name.toLowerCase()];
-        return true;
+
+    // Un/loading
+    public load(name: string): boolean {
+        return false;
     }
+
+    public unload(name: string): boolean {
+        return false;
+    }
+
     public reload(name: string): boolean {
-        if(!this.exists(name)) return false;
-        
         return true;
     }
 
     // Access to registry
     public getNames(){ return Object.keys(this.commands); }
     public getByName(name: string): (boolean|CommandEntry) {
-        if(!this.exists(name)) return false;
-        return this.commands[name];
+        return true;
     }
 
     // Message validator
@@ -74,4 +86,19 @@ export default class Commands {
         await command.instance.run(message, informations.arguments);
         return true;
     }
+}
+
+export class CommandModel {
+    private core: QueenDecimCore;
+    public settings: CommandSettings;
+
+    constructor(core: QueenDecimCore, settings: CommandSettings){
+        this.core = core;
+        this.settings = settings;
+    };
+
+    async run(message: DiscordJS.Message, args: any[]): Promise<boolean> {
+        message.reply("Default command initialized, please set-up the run function.");
+        return true;
+    };
 }
