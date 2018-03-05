@@ -9,14 +9,7 @@ export default class Commands {
     private registry: string[]  = [];
     private commands: {[name: string]: CommandModel} = {};
 
-    constructor(core: QueenDecimCore){
-        this.core = core;
-
-        // Register commands from settings
-        if(core.settings.commands && core.settings.commands.length > 0)
-            for(let commandPath of core.settings.commands)
-                this.register(commandPath);
-    }
+    constructor(core: QueenDecimCore){ this.core = core; }
 
     // Register
     public async registerOne(path: string): Promise<boolean> {
@@ -41,7 +34,8 @@ export default class Commands {
         return registers.indexOf(true) > -1;
     }
 
-    public unregister(path: string): boolean {
+    // Unregister
+    public unRegisterOne(path: string): boolean {
         let pathIndex = this.registry.indexOf(path);
         if(pathIndex === -1) return false
         this.registry.splice(pathIndex, 1);
@@ -49,15 +43,25 @@ export default class Commands {
         return true;
     }
 
-    // Un/loading
+    public unRegister(paths: string|string[]){
+        if(!Array.isArray(paths)) paths = [paths];
+        let unregisters = paths.map(path => this.unRegisterOne(path));
+        return unregisters.indexOf(true) > -1;
+    }
+
+    public unRegisterAll(){ return this.unRegister(this.registry); }
+
+    // Load
     public load(name: string): boolean {
         return false;
     }
 
+    // Unload
     public unload(name: string): boolean {
         return false;
     }
 
+    // Reload
     public reload(name: string): boolean {
         return true;
     }

@@ -44,6 +44,13 @@ class Core {
     private async handleBotReady(){
         // Update bot settings
         Logger("QueenDecim is ready to fire.");
+
+        // Register commands from settings
+        if(this.settings.commands && this.settings.commands.length > 0){
+            await this.commands.register(this.settings.commands);
+            Logger(this.settings.commands.length, "command(s) registered");            
+        }
+
         return true;
     }
 
