@@ -6,7 +6,7 @@ interface QueenDecimSettings {
     version?: string,
     owner?: number,
     owners?: number[],
-    commands?: any[]
+    commands?: string[]
 }
 
 interface CommandRequest {
@@ -20,9 +20,7 @@ interface CommandEntry {
     instance: any
 }
 
-interface CommandBaseInformations {
-    command: string,
-    description?: string,
-    owner?: string,
-    created?: string
+interface CommandSettings {
+    trigger: string,
+    description: string
 }
