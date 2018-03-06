@@ -6,7 +6,9 @@ interface QueenDecimSettings {
     version?: string,
     owner?: number,
     owners?: number[],
-    commands?: string[]
+    commands?: string[],
+    commandsAutoRegister?: boolean,
+    commandsAutoLoad?: boolean
 }
 
 interface CommandRequest {
