@@ -11,15 +11,15 @@
     "license": "ISC",
     "dependencies": {
         "async-file": "^2.0.2",
-        "discord.js": "^11.1.0",
-        "libsodium-wrappers": "^0.5.2",
-        "module-alias": "^2.0.1",
-        "node-opus": "^0.2.6",
+        "discord.js": "^11.3.2",
+        "libsodium-wrappers": "^0.5.4",
+        "module-alias": "^2.0.6",
+        "node-opus": "^0.2.7",
         "string-argv": "0.0.2",
         "uws": "^8.14.1"
     },
     "devDependencies": {
-        "@types/node": "^8.0.47"
+        "@types/node": "^8.9.4"
     },
     "_moduleAliases": {
         "@root": "./dist",
