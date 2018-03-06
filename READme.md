@@ -12,6 +12,7 @@ I have never used another framework, so i'm writing this one only with my ideas 
 - [ ] Run multiple commands at the same time
 - [ ] Commands groups, alias
 - [ ] Web interface
+- [ ] Langs (FR/EN)
 
 If you have any ideas, i am open!
 
