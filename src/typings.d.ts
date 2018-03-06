@@ -1,11 +1,7 @@
 interface QueenDecimSettings {
     token: string,
-    avatar?: string,
-    game?: string,
     trigger: string,
-    version?: string,
-    owner?: number,
-    owners?: number[],
+    owner?: string,
     commands?: string[],
     commandsAutoRegister?: boolean,
     commandsAutoLoad?: boolean
