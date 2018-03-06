@@ -2,74 +2,69 @@ import { Core as QueenDecimCore } from "@root/index";
 import * as DiscordJS from "discord.js";
 import * as StringArgv from "string-argv";
 import Logger, { Danger, Success } from "@utils/logger";
-import { exists } from "async-file";
+
+import CommandEntry from "./entry";
+import CommandModel from "./model";
+
+export { CommandModel };
 
 export default class Commands {
     private core: QueenDecimCore;
-    private registry: string[]  = [];
-    private commands: {[name: string]: CommandModel} = {};
+    private commands: CommandEntry[] = [];
 
     constructor(core: QueenDecimCore){ this.core = core; }
 
     // Register
-    public async registerOne(path: string): Promise<boolean> {
-        Logger(`<RegisterOne> Trying to register "${path}".`);
-        let errors = {
-            already_registered: this.registry.indexOf(path) > -1,
-            not_found: !(await exists(path))
-        };
-        if(errors.already_registered) Danger(`<RegisterOne> "${path}" Already registered.`);
-        else if(errors.not_found) Danger(`<RegisterOne> "${path}" not found.`);
-        else {
-            this.registry.push(path);
-            Success(`<RegisterOne> "${path}" registered.`);
-            return true;
-        }
-        return false;
+    public async register(path: string): Promise<CommandEntry> {
+        let entry = new CommandEntry(path, this.core);
+        // Check the validity of the path
+        if(!(await entry.isValidPath())) return null;
+        // Check if no one as already registered with the same path
+        for(let command of this.commands)
+            if(command.path === entry.path)
+                return null;
+        // Everything is ok
+        this.commands.push(entry);
+        return entry;
     }
 
-    public async register(paths: string|string[]): Promise<boolean> {
-        if(!Array.isArray(paths)) paths = [paths];
-        let registers = await Promise.all(paths.map(path => this.registerOne(path)));
-        return registers.indexOf(true) > -1;
+    public async registerList(paths: string[]): Promise<CommandEntry[]> {
+        return await Promise.all(paths.map(path => this.register(path)));
     }
 
-    // Unregister
-    public unRegisterOne(path: string): boolean {
-        let pathIndex = this.registry.indexOf(path);
-        if(pathIndex === -1) return false
-        this.registry.splice(pathIndex, 1);
-        Logger(`<UnRegister> Unregistered path "${path}".`);
-        return true;
+    // Global commands (registry)
+    public async unregisterAll(): Promise<boolean> {
+        let unregisters = await Promise.all(this.commands.map(command => command.unload()));
+        for(let i in unregisters)
+            if(unregisters[i])
+                delete this.commands[i];
+        return this.commands.length === 0;
     }
 
-    public unRegister(paths: string|string[]){
-        if(!Array.isArray(paths)) paths = [paths];
-        let unregisters = paths.map(path => this.unRegisterOne(path));
-        return unregisters.indexOf(true) > -1;
+    // Global commands (load/unload/reload)
+    // TODO: Add hotreload (clear require cache)
+    public async loadRegistry(): Promise<boolean> {
+        let loadings = await Promise.all(this.commands.map(command => command.load()));
+        return loadings.indexOf(false) === -1;
     }
-
-    public unRegisterAll(){ return this.unRegister(this.registry); }
-
-    // Load
-    public load(name: string): boolean {
-        return false;
+    public async unloadRegistry(): Promise<boolean> {
+        let unloadings = await Promise.all(this.commands.map(command => command.unload()));
+        return unloadings.indexOf(false) === -1;
     }
-
-    // Unload
-    public unload(name: string): boolean {
-        return false;
-    }
-
-    // Reload
-    public reload(name: string): boolean {
-        return true;
+    public async reloadRegistry(): Promise<boolean> {
+        let unloadings = await this.unloadRegistry();
+        if(!unloadings) return false;
+        return await this.loadRegistry();
     }
 
     // Access to registry
-    public getNames(){ return Object.keys(this.commands); }
-    public getByName(name: string): (boolean|CommandEntry) {
-        return true;
+    public getNames(): string[] { return this.commands.map(command => command.instance.settings.trigger.trim()); }
+    public getByName(name: string): CommandEntry {
+        return this.commands
+        .find(command => {
+            let trigger = command.instance.settings.trigger;
+            return trigger.trim().toLowerCase() === name.trim().toLowerCase();
+        });
     }
 
     // Message validator
@@ -90,19 +85,4 @@ export default class Commands {
         await command.instance.run(message, informations.arguments);
         return true;
     }
-}
-
-export class CommandModel {
-    private core: QueenDecimCore;
-    public settings: CommandSettings;
-
-    constructor(core: QueenDecimCore, settings: CommandSettings){
-        this.core = core;
-        this.settings = settings;
-    };
-
-    async run(message: DiscordJS.Message, args: any[]): Promise<boolean> {
-        message.reply("Default command initialized, please set-up the run function.");
-        return true;
-    };
 }
