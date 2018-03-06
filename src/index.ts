@@ -43,18 +43,32 @@ class Core {
     public logOut(): Promise<any> { return this.client.destroy(); }
 
     private async handleBotError(error: any, message?: DiscordJS.Message){
-        Danger(error);
-        if(message){
-            let embed = new DiscordJS.RichEmbed()
-            .setColor("#C0392B")
-            .setTitle("Internal server error")
-            .setDescription(error)
-            .addField("Informations", "if you are not the owner of this bot, please report this error to the developer(s).")
-            .setFooter("See more details in console.")
-            .setTimestamp();
-            message.channel.send({ embed });
-        }
+        Danger("An error has occured.");
         this.dispatcher.emit(Events.ERROR, error);
+
+        // Throw error in PM
+        if(this.settings.throwErrorPM === false) return false;
+        let embed = new DiscordJS.RichEmbed()
+        .setColor("#C0392B")
+        .setFooter("See more details in console.")
+        .setTimestamp();
+            
+        if(this.settings.owner){
+            // Throw in PM
+            embed
+            .setTitle("Internal server error")
+            .setDescription(error);
+            await Promise.all([
+                this.client.users.get(this.settings.owner).send({ embed }),
+                message.channel.send("Thanks you, we just found a new error.")
+            ]);
+        } else {
+            // Warning in the server
+            Danger("Please, set-up the OWNER option or disable throwErrorPM.");
+            embed.addField("Warning", "If you are the owner of this bot, please set-up the `owner` option with your ID, if it's not you, please alert him.");
+            embed.addField("Error reported", "The error has been reported in the console.");
+            await message.channel.send({ embed });
+        }
     }
 
     private async handleBotReady(){
@@ -81,7 +95,11 @@ class Core {
 
             // Execute the command
             Logger("New command received", message.content);
-            let runState = await this.commands.run(message);
+            let runState = await this.commands.run(message)
+            .catch(error => {
+                loading.delete();
+                throw new Error(error);
+            })
             if(!runState) message.reply("the command seems unexistant... try again.");
 
             // Return the command result

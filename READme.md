@@ -7,18 +7,18 @@ I have never used another framework, so i'm writing this one only with my ideas 
 ## Features
 - [x] Startup and global options
 - [x] Register simple commands (from files only)
-- [ ] Error handling
+- [x] Error handling
 - [ ] Hot reload (only commands)
 - [ ] Run multiple commands at the same time
 - [ ] Commands groups, alias
 - [ ] Web interface
+
 If you have any ideas, i am open!
 
 ## Installation
 1. Install [NodeJS](https://nodejs.org/en/).
 2. Install [TypeScript](https://www.typescriptlang.org/index.html#download-links).
 3. Execute `npm install` where you have the `package.json`.
-
 
 ## Set-up first project
 1. Execute the npm script `watch` with `npm run-script watch` or use directly `tsc -p src`.

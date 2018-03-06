@@ -4,7 +4,8 @@ interface QueenDecimSettings {
     owner?: string,
     commands?: string[],
     commandsAutoRegister?: boolean,
-    commandsAutoLoad?: boolean
+    commandsAutoLoad?: boolean,
+    throwErrorPM?: boolean
 }
 
 interface CommandRequest {
