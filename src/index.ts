@@ -2,11 +2,21 @@ require("module-alias/register");
 
 import * as DiscordJS from "discord.js";
 import Commands, { CommandModel } from "./commands";
+import { EventEmitter } from "events";
 
 import Logger, { Danger } from "@utils/logger";
 import ExecutionTime from "@utils/executionTime";
 
+// Events const
+const Events = {
+    CONNECTED: "ServerConnected",
+    ERROR: "ServerError",
+    DISCONNECTED: "ServerDisconnected"
+}
+
+// Core
 class Core {
+    public dispatcher: EventEmitter = new EventEmitter();
     public settings: QueenDecimSettings;
     public client: DiscordJS.Client = new DiscordJS.Client();
     public commands: Commands;
@@ -17,28 +27,34 @@ class Core {
         this.commands = new Commands(this);
 
         // Handle main messages
-        this.client.on("ready", () => this.handleBotReady().catch(console.error));
+        this.client.on("ready", () => this.handleBotReady().catch(this.handleBotError.bind(this)));
         this.client.on("message", message => {
             this.handleNewMessage(message)
             .then(([isCommand, executionTime]) => {
                 if(isCommand)
                     Logger(`The previous command has been executed in ${executionTime}ms.`);
             })
-            .catch(error => {
-                Danger(error);
-                let embed = new DiscordJS.RichEmbed()
-                .setColor("#C0392B")
-                .setTitle("Internal server error")
-                .setDescription(error)
-                .addField("Informations", "if you are not the owner of this bot, please report this error to the developer(s).")
-                .setFooter("See more details in console.")
-                .setTimestamp();
-                message.channel.send({ embed });
-            });
-        })
+            .catch(error => this.handleBotError(error, message));
+        });
+        this.client.on("disconnect", () => this.dispatcher.emit(Events.DISCONNECTED));
+    }
 
-        // Connection the bot
-        this.client.login(settings.token);
+    public logIn(): Promise<string> { return this.client.login(this.settings.token); }
+    public logOut(): Promise<any> { return this.client.destroy(); }
+
+    private async handleBotError(error: any, message?: DiscordJS.Message){
+        Danger(error);
+        if(message){
+            let embed = new DiscordJS.RichEmbed()
+            .setColor("#C0392B")
+            .setTitle("Internal server error")
+            .setDescription(error)
+            .addField("Informations", "if you are not the owner of this bot, please report this error to the developer(s).")
+            .setFooter("See more details in console.")
+            .setTimestamp();
+            message.channel.send({ embed });
+        }
+        this.dispatcher.emit(Events.ERROR, error);
     }
 
     private async handleBotReady(){
@@ -46,11 +62,14 @@ class Core {
         Logger("QueenDecim is ready to fire.");
 
         // Register commands from settings
-        if(this.settings.commands && this.settings.commands.length > 0){
-            await this.commands.register(this.settings.commands);
-            Logger(this.settings.commands.length, "command(s) registered");            
+        if(this.settings.commandsAutoRegister && this.settings.commands && this.settings.commands.length > 0){
+            Logger(this.settings.commands.length, "command(s) found.");            
+            await this.commands.registerList(this.settings.commands);
+            if(this.settings.commandsAutoLoad)
+                await this.commands.loadRegistry();
         }
 
+        this.dispatcher.emit(Events.CONNECTED);
         return true;
     }
 
@@ -75,4 +94,4 @@ class Core {
     }
 }
 
-export { DiscordJS, Core, CommandModel };
+export { DiscordJS, Core, CommandModel, Events };
