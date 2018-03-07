@@ -12,9 +12,8 @@
     "dependencies": {
         "async-file": "^2.0.2",
         "discord.js": "^11.3.2",
-        "libsodium-wrappers": "^0.5.4",
+        "erlpack": "^0.1.2",
         "module-alias": "^2.0.6",
-        "node-opus": "^0.2.7",
         "string-argv": "0.0.2",
         "uws": "^8.14.1"
     },
