@@ -1,6 +1,6 @@
 // Register aliases
-import ModuleAlias from "module-alias";
-ModuleAlias.addAliases({
+import { addAliases as ModuleAliases } from "module-alias";
+ModuleAliases({
     "@root": __dirname,
     "@utils": __dirname + "/utils"
 })
