@@ -1,14 +1,16 @@
 {
-    "name": "discordbot-base",
+    "name": "@tanuki/discord-bot-base",
     "version": "1.0.0",
-    "description": "Discord's bot base with modules system.",
-    "main": "index.js",
+    "description": "Powerful discord's bot base with modular commands.",
+    "main": "dist/index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "watch": "tsc -p src"
     },
-    "author": "Sapuraizu",
-    "license": "ISC",
+    "author": "Tanuki",
+    "repository": "github:nooneexpectme/discord-bot-base",
+    "keywords": ["discord", "bot", "base", "commando", "discordjs", "light"],
+    "license": "APACHE-2.0",
     "dependencies": {
         "async-file": "^2.0.2",
         "discord.js": "^11.3.2",
