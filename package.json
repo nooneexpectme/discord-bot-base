@@ -1,7 +1,11 @@
 {
     "name": "@tanuki/discord-bot-base",
     "version": "1.0.2",
-    "description": "Powerful discord's bot base with modular commands.",
+    "description": "Discord's bot base based on discordjs with modular commands system.",
+    "keywords": ["discord", "bot", "base", "commando", "discordjs", "light"],
+    "bugs": {
+        "url": "https://github.com/nooneexpectme/discord-bot-base/issues"
+    },
     "main": "dist/index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +13,6 @@
     },
     "author": "Tanuki",
     "repository": "github:nooneexpectme/discord-bot-base",
-    "keywords": ["discord", "bot", "base", "commando", "discordjs", "light"],
     "license": "APACHE-2.0",
     "dependencies": {
         "async-file": "^2.0.2",
