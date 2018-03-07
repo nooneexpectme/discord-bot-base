@@ -1,5 +1,11 @@
-require("module-alias/register");
+// Register aliases
+import ModuleAlias from "module-alias";
+ModuleAlias.addAliases({
+    "@root": __dirname,
+    "@utils": __dirname + "/utils"
+})
 
+// Imports
 import * as DiscordJS from "discord.js";
 import Commands, { CommandModel } from "./commands";
 import { EventEmitter } from "events";
@@ -88,27 +94,26 @@ class Core {
     }
 
     private async handleNewMessage(message: DiscordJS.Message): Promise<[boolean, number]> {
-        if(this.commands.isRequestMessage(message.content)){
-            // Send loading message
-            let loading = <DiscordJS.Message>await message.channel.send("Please wait while i execute the command..."),
-                executionTime = new ExecutionTime();
+        if(!this.commands.isRequestMessage(message.content)) return [false, 0];
+        
+        // Send loading message
+        let loading = <DiscordJS.Message>await message.channel.send("Please wait while i execute the command..."),
+            executionTime = new ExecutionTime();
 
-            // Execute the command
-            Logger("New command received", message.content);
-            let runState = await this.commands.run(message)
-            .catch(error => {
-                loading.delete();
-                throw new Error(error);
-            })
-            if(!runState) message.reply("the command seems unexistant... try again.");
+        // Execute the command
+        Logger("New command received", message.content);
+        let runState = await this.commands.run(message)
+        .catch(error => {
+            loading.delete();
+            throw new Error(error);
+        })
+        if(!runState) message.reply("the command seems unexistant... try again.");
 
-            // Return the command result
-            let stopedAt = executionTime.stop();
-            await loading.edit(`Command executed in ${stopedAt}ms.`);
-            loading.delete(2500);
-            return [true, stopedAt];
-        }
-        return [false, 0];
+        // Return the command result
+        let stopedAt = executionTime.stop();
+        await loading.edit(`Command executed in ${stopedAt}ms.`);
+        loading.delete(2500);
+        return [true, stopedAt];
     }
 }
 

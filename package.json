@@ -1,6 +1,6 @@
 {
     "name": "@tanuki/discord-bot-base",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "Powerful discord's bot base with modular commands.",
     "main": "dist/index.js",
     "scripts": {
@@ -21,9 +21,5 @@
     },
     "devDependencies": {
         "@types/node": "^8.9.4"
-    },
-    "_moduleAliases": {
-        "@root": "./dist",
-        "@utils": "./dist/utils"
     }
 }
