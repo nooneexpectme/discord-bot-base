@@ -1,8 +1,22 @@
 # Discord Bot Base
-## About
 DiscordBotBase is an unofficial framework written in TypeScript for [discord.js](https://github.com/discordjs/discord.js), it allow you to create a discord's bot with the minimum of lines.
 
 I have never used another framework, so i'm writing this one only with my ideas and "what i think useful".
+
+## Example
+```js
+const QueenDecim = require("@tanuki/discord-bot-base");
+
+const Client = new QueenDecim.Core({
+    token: null,
+    owner: null,
+    trigger: null
+});
+
+Client.logIn().then(() => {
+    console.log("I'm ready yuh!");
+})
+```
 
 ## Features
 - [x] Startup and global options
@@ -17,17 +31,14 @@ I have never used another framework, so i'm writing this one only with my ideas 
 If you have any ideas, i am open!
 
 ## Installation
-1. Install [NodeJS](https://nodejs.org/en/).
-2. Install [TypeScript](https://www.typescriptlang.org/index.html#download-links) with `npm install -g typescript`.
-3. Execute `npm install` where you have the `package.json`.
+Our package: `npm i --save @tanuki/discord-bot-base`
+Voice support: `npm i --save node-opus`
+Faster voice packet encryption/decryption: `npm i --save libsodium.js`
 
-## Set-up first project
-1. Execute the npm script `watch` with `npm run-script watch` or use directly `tsc -p src`.
-2. See the `tests/` folder, you need to replace needed values by yours.
-3. Run your project with:
-```sh
-$ node tests
-```
+## Links
+Repository (master, stable): https://github.com/nooneexpectme/discord-bot-base
+Repository (dev, may be unstable): https://github.com/nooneexpectme/discord-bot-base/tree/dev
+NPM: https://www.npmjs.com/package/@tanuki/discord-bot-base
 
-## Contribution
-Anyone can contribute to this project and i will be happy if you also want to contact me on discord: **Tanuki#0003** (Even you're french! Je le suis aussi).
+## Contributing
+Anyone can contribute to this project with **issues** and **pull requests**, i will be happy if you also want to contact me on discord: **Tanuki#0003** (Even you're french! Je le suis aussi).
