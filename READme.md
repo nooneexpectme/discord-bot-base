@@ -1,11 +1,9 @@
 # Discord Bot Base
-<p align="center">
-    <img alt="NodeICO" src="https://nodei.co/npm/@tanuki/discord-bot-base.png?mini=true"/>
+<img alt="NodeICO" src="https://nodei.co/npm/@tanuki/discord-bot-base.png?mini=true"/>
 
-    DiscordBotBase is an unofficial framework written in TypeScript for [discord.js](https://github.com/discordjs/discord.js), it allow you to create a discord's bot with the minimum of lines.
+DiscordBotBase is an unofficial framework written in TypeScript for [discord.js](https://github.com/discordjs/discord.js), it allow you to create a discord's bot with the minimum of lines.
 
-    I have never used another framework, so i'm writing this one only with my ideas and "what i think useful".
-</p>
+I have never used another framework, so i'm writing this one only with my ideas and "what i think useful".
 
 ## Example
 ```js
