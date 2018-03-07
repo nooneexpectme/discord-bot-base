@@ -18,7 +18,7 @@ If you have any ideas, i am open!
 
 ## Installation
 1. Install [NodeJS](https://nodejs.org/en/).
-2. Install [TypeScript](https://www.typescriptlang.org/index.html#download-links).
+2. Install [TypeScript](https://www.typescriptlang.org/index.html#download-links) with `npm install -g typescript`.
 3. Execute `npm install` where you have the `package.json`.
 
 ## Set-up first project
