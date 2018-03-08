@@ -11,10 +11,10 @@ const
     OWNER_ID = null;
 
 // Init QueenDecimCore
-let DebugBot = new QueenDecim.Core({
+let DebugBot = new QueenDecim.Client({
     token: process.argv[2] || BOT_TOKEN,
-    trigger: "!",
-    owner: process.argv[3] || OWNER_ID,
+    prefix: "!",
+    ownerId: process.argv[3] || OWNER_ID,
     commands: [
         join(__dirname, "commands", "reply.js"),
         join(__dirname, "commands", "error.js"),

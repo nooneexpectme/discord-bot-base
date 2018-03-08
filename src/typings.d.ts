@@ -1,6 +1,6 @@
 interface QueenDecimSettings {
     token: string,
-    trigger: string,
+    prefix: string,
     ownerId?: string,
     commands?: string[],
     commandsAutoRegister?: boolean,
@@ -20,6 +20,6 @@ interface CommandEntry {
 }
 
 interface CommandSettings {
-    trigger: string,
+    name: string,
     description: string
 }

@@ -9,14 +9,14 @@ import CommandModel from "./model";
 export { CommandModel };
 
 export default class Commands {
-    private core: QueenDecimClient;
+    private client: QueenDecimClient;
     private commands: CommandEntry[] = [];
 
-    constructor(core: QueenDecimClient){ this.core = core; }
+    constructor(client: QueenDecimClient){ this.client = client; }
 
     // Register
     private async _register(path: string): Promise<CommandEntry> {
-        let entry = new CommandEntry(path, this.core);
+        let entry = new CommandEntry(path, this.client);
         // Check the validity of the path
         if(!(await entry.isValidPath())) return null;
         // Check if no one as already registered with the same path
@@ -60,19 +60,19 @@ export default class Commands {
     }
 
     // Access to registry
-    public getNames(): string[] { return this.commands.map(command => command.instance.settings.trigger.trim()); }
+    public getNames(): string[] { return this.commands.map(command => command.instance.settings.name.trim()); }
     public getByName(name: string): CommandEntry {
         return this.commands
         .find(command => {
-            let trigger = command.instance.settings.trigger;
-            return trigger.trim().toLowerCase() === name.trim().toLowerCase();
+            let commandName = command.instance.settings.name;
+            return commandName.trim().toLowerCase() === name.trim().toLowerCase();
         });
     }
 
     // Message validator
-    public isRequestMessage(content: string): boolean { return content.startsWith(this.core.settings.trigger, 0); }
+    public isRequestMessage(content: string): boolean { return content.startsWith(this.client.settings.prefix, 0); }
     public getRequestInformations(content: string): CommandRequest {
-        content = content.replace(this.core.settings.trigger, "").trim();
+        content = content.replace(this.client.settings.prefix, "").trim();
         if(!content.length) return { command: null, arguments: null };
         let cmd = (new RegExp(/([a-zA-Z0-9]+)/, "g")).exec(content);
         content = content.replace(cmd[0], "").trim();
