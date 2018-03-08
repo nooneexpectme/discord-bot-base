@@ -36,9 +36,9 @@ class Client {
         this.client.on("ready", () => this.handleBotReady().catch(this.handleBotError.bind(this)));
         this.client.on("message", message => {
             this.handleNewMessage(message)
-            .then(([isCommand, executionTime]) => {
+            .then(isCommand => {
                 if(isCommand)
-                    Logger(`The previous command has been executed in ${executionTime}ms.`);
+                    Logger(`The previous command has been executed.`);
             })
             .catch(error => this.handleBotError(error, message));
         });
@@ -93,12 +93,11 @@ class Client {
         return true;
     }
 
-    private async handleNewMessage(message: DiscordJS.Message): Promise<[boolean, number]> {
-        if(!this.commands.isRequestMessage(message.content)) return [false, 0];
+    private async handleNewMessage(message: DiscordJS.Message): Promise<boolean> {
+        if(!this.commands.isRequestMessage(message.content)) return false;
         
         // Send loading message
-        let loading = <DiscordJS.Message>await message.channel.send("Please wait while i execute the command..."),
-            executionTime = new ExecutionTime();
+        let loading = <DiscordJS.Message>await message.channel.send("Please wait while i execute the command...");
 
         // Execute the command
         Logger("New command received", message.content);
@@ -110,10 +109,9 @@ class Client {
         if(!runState) message.reply("the command seems unexistant... try again.");
 
         // Return the command result
-        let stopedAt = executionTime.stop();
-        await loading.edit(`Command executed in ${stopedAt}ms.`);
+        await loading.edit(`Command executed.`);
         loading.delete(2500);
-        return [true, stopedAt];
+        return true;
     }
 }
 
