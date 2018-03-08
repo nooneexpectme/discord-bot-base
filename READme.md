@@ -19,6 +19,7 @@ Client.logIn().then(() => {
     console.log("I'm ready yuh!");
 })
 ```
+[See complete example on GitHub.](https://github.com/nooneexpectme/discord-bot-base/tree/dev/test)
 
 ## Features
 - [x] Startup and global options
