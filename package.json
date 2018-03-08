@@ -22,7 +22,6 @@
     "repository": "github:nooneexpectme/discord-bot-base",
     "license": "APACHE-2.0",
     "dependencies": {
-        "async-file": "^2.0.2",
         "discord.js": "^11.3.2",
         "erlpack": "^0.1.2",
         "module-alias": "^2.0.6",

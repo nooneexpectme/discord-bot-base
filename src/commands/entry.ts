@@ -1,5 +1,4 @@
 import { Client as QueenDecimClient } from "@root/index";
-import { exists } from "async-file";
 import CommandModel from "./model";
 
 export default class CommandEntry {
