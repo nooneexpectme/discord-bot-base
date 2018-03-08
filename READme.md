@@ -5,14 +5,14 @@ DiscordBotBase is an unofficial framework written in TypeScript for [discord.js]
 
 I have never used another framework, so i'm writing this one only with my ideas and "what i think useful".
 
-## Example
+## Example (minimal)
 ```js
 const QueenDecim = require("@tanuki/discord-bot-base");
 
-const Client = new QueenDecim.Core({
-    token: null, // Bot Token
-    owner: null, // Owner ID (Optional)
-    trigger: null // Prefix
+const Client = new QueenDecim.Client({
+    token: null,
+    ownerId: null,
+    prefix: null
 });
 
 Client.logIn().then(() => {
@@ -25,7 +25,6 @@ Client.logIn().then(() => {
 - [x] Register simple commands (from files only)
 - [x] Error handling
 - [ ] Hot reload (only commands)
-- [ ] Run multiple commands at the same time
 - [ ] Commands groups, alias
 - [ ] Web interface
 - [ ] Langs (FR/EN)
