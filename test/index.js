@@ -18,7 +18,8 @@ let DebugBot = new QueenDecim.Client({
     commands: [
         join(__dirname, "commands", "reply.js"),
         join(__dirname, "commands", "error.js"),
-        join(__dirname, "commands", "eval.js")
+        join(__dirname, "commands", "eval.js"),
+        join(__dirname, "commands", "reload.js")
     ],
     commandsAutoRegister: true,
     commandsAutoLoad: true

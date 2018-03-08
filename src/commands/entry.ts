@@ -20,8 +20,9 @@ export default class CommandEntry {
     public async isValidPath(): Promise<boolean> { return await exists(this._path); }
 
     // TODO: Create new instance of command
-    public async load(): Promise<boolean> {
+    public async load(withoutCache?: boolean): Promise<boolean> {
         if(!(await this.isValidPath())) return false;
+        if(withoutCache) delete require.cache[require.resolve(this._path)];
         this._instance = new (require(this._path))(this._client);
         this._isLoaded = await this.instance.load();
         return this.isLoaded;
@@ -33,10 +34,9 @@ export default class CommandEntry {
         return this.isLoaded;
     }
 
-    // TODO: Set hot-reload on parameters (default: true), clear require cache
-    public async reload(): Promise<boolean> {
+    public async reload(withoutCache: boolean = true): Promise<boolean> {
         if(!this._isLoaded) return false;
         if(!(await this.unload())) return false;
-        return await this.load();
+        return await this.load(withoutCache);
     }
 }

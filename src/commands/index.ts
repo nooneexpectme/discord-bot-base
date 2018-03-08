@@ -44,19 +44,18 @@ export default class Commands {
     }
 
     // Global commands (load/unload/reload)
-    // TODO: Add hotreload (clear require cache)
-    public async loadRegistry(): Promise<boolean> {
-        let loadings = await Promise.all(this.commands.map(command => command.load()));
+    public async loadRegistry(withoutCaching: boolean = false): Promise<boolean> {
+        let loadings = await Promise.all(this.commands.map(command => command.load(withoutCaching)));
         return loadings.indexOf(false) === -1;
     }
     public async unloadRegistry(): Promise<boolean> {
         let unloadings = await Promise.all(this.commands.map(command => command.unload()));
         return unloadings.indexOf(false) === -1;
     }
-    public async reloadRegistry(): Promise<boolean> {
+    public async reloadRegistry(withoutCaching: boolean = false): Promise<boolean> {
         let unloadings = await this.unloadRegistry();
         if(!unloadings) return false;
-        return await this.loadRegistry();
+        return await this.loadRegistry(withoutCaching);
     }
 
     // Access to registry

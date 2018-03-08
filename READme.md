@@ -24,7 +24,7 @@ Client.logIn().then(() => {
 - [x] Startup and global options
 - [x] Register simple commands (from files only)
 - [x] Error handling
-- [ ] Hot reload (only commands)
+- [x] Hot reload (only command)
 - [ ] Commands groups, alias
 - [ ] Web interface
 - [ ] Langs (FR/EN)

@@ -11,7 +11,6 @@ import Commands, { CommandModel } from "./commands";
 import { EventEmitter } from "events";
 
 import Logger, { Danger } from "@utils/logger";
-import ExecutionTime from "@utils/executionTime";
 
 // Events const
 const Events = {
