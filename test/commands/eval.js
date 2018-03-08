@@ -1,8 +1,8 @@
 const { CommandModel } = require("../../dist");
 class EvalCommand extends CommandModel {
-    constructor(core){
-        super(core, {
-            trigger: "eval",
+    constructor(client){
+        super(client, {
+            name: "eval",
             description: "Debug command"
         })
     }

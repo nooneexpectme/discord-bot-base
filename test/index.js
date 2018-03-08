@@ -30,6 +30,22 @@ DebugBot.dispatcher
 .on(QueenDecim.Events.ERROR, error => { console.error("ERROR", error); })
 .on(QueenDecim.Events.DISCONNECTED, () => { console.log("DISCONNECTED"); })
 
+// Push command directly from class in registry
+DebugBot.commands.register(class Command extends QueenDecim.CommandModel {
+    constructor(client){
+        super(client, {
+            name: "example",
+            description: "Description command"
+        });
+    }
+
+    async run(message, args){
+        message.reply("Reply from registered command");
+        return true;
+    }
+});
+
+
 // Finally log-in the bot
 DebugBot.logIn()
 .then(() => console.log("OK"))

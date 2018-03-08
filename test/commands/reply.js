@@ -1,8 +1,8 @@
 const { CommandModel } = require("../../dist");
 class ReplyCommand extends CommandModel {
-    constructor(core){
-        super(core, {
-            trigger: "reply",
+    constructor(client){
+        super(client, {
+            name: "reply",
             description: "Reply to the user"
         });
     }

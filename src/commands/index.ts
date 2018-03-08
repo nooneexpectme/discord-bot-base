@@ -1,4 +1,4 @@
-import { Core as QueenDecimCore } from "@root/index";
+import { Client as QueenDecimClient } from "@root/index";
 import * as DiscordJS from "discord.js";
 import * as StringArgv from "string-argv";
 import Logger, { Danger, Success } from "@utils/logger";
@@ -9,13 +9,13 @@ import CommandModel from "./model";
 export { CommandModel };
 
 export default class Commands {
-    private core: QueenDecimCore;
+    private core: QueenDecimClient;
     private commands: CommandEntry[] = [];
 
-    constructor(core: QueenDecimCore){ this.core = core; }
+    constructor(core: QueenDecimClient){ this.core = core; }
 
     // Register
-    public async register(path: string): Promise<CommandEntry> {
+    private async _register(path: string): Promise<CommandEntry> {
         let entry = new CommandEntry(path, this.core);
         // Check the validity of the path
         if(!(await entry.isValidPath())) return null;
@@ -28,8 +28,10 @@ export default class Commands {
         return entry;
     }
 
-    public async registerList(paths: string[]): Promise<CommandEntry[]> {
-        return await Promise.all(paths.map(path => this.register(path)));
+    public async register(paths: string|string[]): Promise<CommandEntry|CommandEntry[]> {
+        if(!Array.isArray(paths)) paths = [paths];
+        let registers = await Promise.all(paths.map(path => this._register(path)));
+        return paths.length === 1 ? registers[0] : registers;
     }
 
     // Global commands (registry)

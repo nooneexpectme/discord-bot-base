@@ -1,8 +1,8 @@
 const { CommandModel } = require("../../dist");
 class ErrorCommand extends CommandModel {
-    constructor(core){
-        super(core, {
-            trigger: "error",
+    constructor(client){
+        super(client, {
+            name: "error",
             description: "throw an custom error"
         });
     }

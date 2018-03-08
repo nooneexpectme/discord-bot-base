@@ -1,7 +1,7 @@
 interface QueenDecimSettings {
     token: string,
     trigger: string,
-    owner?: string,
+    ownerId?: string,
     commands?: string[],
     commandsAutoRegister?: boolean,
     commandsAutoLoad?: boolean,

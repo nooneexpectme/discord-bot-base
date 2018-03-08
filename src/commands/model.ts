@@ -1,11 +1,11 @@
-import { Core as QueenDecimCore, DiscordJS } from "@root/index";
+import { Client as QueenDecimClient, DiscordJS } from "@root/index";
 
 export default class CommandModel {
-    private core: QueenDecimCore;
+    private client: QueenDecimClient;
     public settings: CommandSettings;
 
-    constructor(core: QueenDecimCore, settings: CommandSettings){
-        this.core = core;
+    constructor(client: QueenDecimClient, settings: CommandSettings){
+        this.client = client;
         this.settings = settings;
     };
 

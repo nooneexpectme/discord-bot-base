@@ -1,4 +1,4 @@
-import { Core as QueenDecimCore } from "@root/index";
+import { Client as QueenDecimClient } from "@root/index";
 import { exists } from "async-file";
 import CommandModel from "./model";
 
@@ -6,11 +6,11 @@ export default class CommandEntry {
     private _path: string;
     private _isLoaded: boolean;
     private _instance: CommandModel;
-    private _core: QueenDecimCore;
+    private _client: QueenDecimClient;
 
-    constructor(path: string, core: QueenDecimCore){
+    constructor(path: string, core: QueenDecimClient){
         this._path = path;
-        this._core = core;
+        this._client = core;
     }
 
     public get path(): string { return this._path; }
@@ -22,7 +22,7 @@ export default class CommandEntry {
     // TODO: Create new instance of command
     public async load(): Promise<boolean> {
         if(!(await this.isValidPath())) return false;
-        this._instance = new (require(this._path))(this._core);
+        this._instance = new (require(this._path))(this._client);
         this._isLoaded = await this.instance.load();
         return this.isLoaded;
     }

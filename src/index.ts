@@ -20,8 +20,8 @@ const Events = {
     DISCONNECTED: "ServerDisconnected"
 }
 
-// Core
-class Core {
+// Client
+class Client {
     public dispatcher: EventEmitter = new EventEmitter();
     public settings: QueenDecimSettings;
     public client: DiscordJS.Client = new DiscordJS.Client();
@@ -59,13 +59,13 @@ class Core {
         .setFooter("See more details in console.")
         .setTimestamp();
             
-        if(this.settings.owner){
+        if(this.settings.ownerId){
             // Throw in PM
             embed
             .setTitle("Internal server error")
             .setDescription(error);
             await Promise.all([
-                this.client.users.get(this.settings.owner).send({ embed }),
+                this.client.users.get(this.settings.ownerId).send({ embed }),
                 message.channel.send("Thanks you, we just found a new error.")
             ]);
         } else {
@@ -84,7 +84,7 @@ class Core {
         // Register commands from settings
         if(this.settings.commandsAutoRegister && this.settings.commands && this.settings.commands.length > 0){
             Logger(this.settings.commands.length, "command(s) found.");            
-            await this.commands.registerList(this.settings.commands);
+            await this.commands.register(this.settings.commands);
             if(this.settings.commandsAutoLoad)
                 await this.commands.loadRegistry();
         }
@@ -117,4 +117,4 @@ class Core {
     }
 }
 
-export { DiscordJS, Core, CommandModel, Events };
+export { DiscordJS, Client, CommandModel, Events };
