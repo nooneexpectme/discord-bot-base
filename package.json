@@ -1,8 +1,15 @@
 {
     "name": "@tanuki/discord-bot-base",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "Discord's bot base based on discordjs with modular commands system.",
-    "keywords": ["discord", "bot", "base", "commando", "discordjs", "light"],
+    "keywords": [
+        "discord",
+        "bot",
+        "base",
+        "commando",
+        "discordjs",
+        "light"
+    ],
     "bugs": {
         "url": "https://github.com/nooneexpectme/discord-bot-base/issues"
     },
