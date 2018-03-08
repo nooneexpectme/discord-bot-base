@@ -15,23 +15,18 @@ export default class Commands {
     constructor(client: QueenDecimClient){ this.client = client; }
 
     // Register
-    private async _register(path: string): Promise<CommandEntry> {
-        let entry = new CommandEntry(path, this.client);
-        // Check the validity of the path
-        if(!(await entry.isValidPath())) return null;
-        // Check if no one as already registered with the same path
-        for(let command of this.commands)
-            if(command.path === entry.path)
-                return null;
-        // Everything is ok
+    // TODO: Check for duplications commands name
+    private _register(command: any): CommandEntry {
+        let entry = new CommandEntry(command, this.client);
+        if(!entry.isValidClass) return null;
         this.commands.push(entry);
         return entry;
     }
 
-    public async register(paths: string|string[]): Promise<CommandEntry|CommandEntry[]> {
-        if(!Array.isArray(paths)) paths = [paths];
-        let registers = await Promise.all(paths.map(path => this._register(path)));
-        return paths.length === 1 ? registers[0] : registers;
+    public register(commands: any|any[]): CommandEntry|CommandEntry[] {
+        if(!Array.isArray(commands)) commands = [commands];
+        let registers = commands.map(command => this._register(command));
+        return commands.length === 1 ? registers[0] : registers;
     }
 
     // Global commands (registry)
@@ -45,7 +40,7 @@ export default class Commands {
 
     // Global commands (load/unload/reload)
     public async loadRegistry(withoutCaching: boolean = false): Promise<boolean> {
-        let loadings = await Promise.all(this.commands.map(command => command.load(withoutCaching)));
+        let loadings = await Promise.all(this.commands.map(command => command.load()));
         return loadings.indexOf(false) === -1;
     }
     public async unloadRegistry(): Promise<boolean> {

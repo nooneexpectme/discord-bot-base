@@ -3,27 +3,23 @@ import { exists } from "async-file";
 import CommandModel from "./model";
 
 export default class CommandEntry {
-    private _path: string;
+    private _class: any;
     private _isLoaded: boolean;
     private _instance: CommandModel;
     private _client: QueenDecimClient;
 
-    constructor(path: string, core: QueenDecimClient){
-        this._path = path;
+    constructor(command: () => void, core: QueenDecimClient){
+        this._class = command;
         this._client = core;
     }
 
-    public get path(): string { return this._path; }
     public get isLoaded(): boolean { return this._isLoaded; }
     public get instance(): CommandModel { return this._instance; }
+    public get isValidClass(): boolean { return (new this._class()) instanceof CommandModel; };
 
-    public async isValidPath(): Promise<boolean> { return await exists(this._path); }
-
-    // TODO: Create new instance of command
-    public async load(withoutCache?: boolean): Promise<boolean> {
-        if(!(await this.isValidPath())) return false;
-        if(withoutCache) delete require.cache[require.resolve(this._path)];
-        this._instance = new (require(this._path))(this._client);
+    public async load(): Promise<boolean> {
+        if(!this.isValidClass) return false;
+        this._instance = new this._class(this._client);
         this._isLoaded = await this.instance.load();
         return this.isLoaded;
     }
@@ -34,9 +30,9 @@ export default class CommandEntry {
         return this.isLoaded;
     }
 
-    public async reload(withoutCache: boolean = true): Promise<boolean> {
+    public async reload(): Promise<boolean> {
         if(!this._isLoaded) return false;
         if(!(await this.unload())) return false;
-        return await this.load(withoutCache);
+        return await this.load();
     }
 }
