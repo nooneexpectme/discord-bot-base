@@ -3,7 +3,8 @@ class ErrorCommand extends CommandModel {
     constructor(client){
         super(client, {
             name: "error",
-            description: "throw an custom error"
+            description: "throw an custom error",
+            aliases: ["err"]
         });
     }
 

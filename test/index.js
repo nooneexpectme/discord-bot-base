@@ -17,7 +17,7 @@ const DebugBot = new QueenDecim.Client({
     token: process.argv[2] || BOT_TOKEN,
     prefix: "!",
     ownerId: process.argv[3] || OWNER_ID,
-    commands: [CMD_REPLY, CMD_ERROR],
+    commands: [CMD_REPLY],
     commandsAutoRegister: true,
     commandsAutoLoad: true
 });
@@ -31,10 +31,9 @@ DebugBot.dispatcher
 // We will use async functions
 (async () => {
     // Register and load command manually
-    await DebugBot.commands.register(CMD_EVAL).load();
+   // await DebugBot.commands.register(CMD_EVAL).load();
     // Finally log-in the bot
-    await DebugBot.logIn();
-    return true;
+    return DebugBot.logIn();
 })()
 .then(() => console.log("OK"))
 .catch(console.error);

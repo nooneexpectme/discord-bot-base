@@ -9,8 +9,9 @@ interface QueenDecimSettings {
 }
 
 interface CommandRequest {
-    command: string,
-    arguments: string[]
+    command: CommandEntry,
+    parameters: {[name: string]: string},
+    isValid: boolean
 }
 
 interface CommandEntry {
@@ -21,5 +22,14 @@ interface CommandEntry {
 
 interface CommandSettings {
     name: string,
-    description: string
+    description: string,
+    parameter?: CommandSettingsParameter,
+    parameters?: CommandSettingsParameter[],
+    aliases?: string[]
+}
+
+interface CommandSettingsParameter {
+    name: string,
+    value: RegExp,
+    type?: any
 }

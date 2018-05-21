@@ -1,117 +1,119 @@
 // Register aliases
-import { addAliases as ModuleAliases } from "module-alias";
+import { addAliases as ModuleAliases } from 'module-alias'
 ModuleAliases({
-    "@root": __dirname,
-    "@utils": __dirname + "/utils"
+    '@root': __dirname,
+    '@utils': __dirname + '/utils'
 })
 
 // Imports
-import * as DiscordJS from "discord.js";
-import Commands, { CommandModel } from "./commands";
-import { EventEmitter } from "events";
+import * as DiscordJS from 'discord.js'
+import Commands, { CommandModel } from './commands'
+import { EventEmitter } from 'events'
 
-import Logger, { Danger } from "@utils/logger";
+// Debug
+import * as debug from 'debug'
+const log = debug('qd:main')
 
-// Events const
+// Events
 const Events = {
-    CONNECTED: "ServerConnected",
-    ERROR: "ServerError",
-    DISCONNECTED: "ServerDisconnected"
+    CONNECTED: 'ServerConnected',
+    ERROR: 'ServerError',
+    DISCONNECTED: 'ServerDisconnected'
 }
 
 // Client
 class Client {
-    public dispatcher: EventEmitter = new EventEmitter();
-    public settings: QueenDecimSettings;
-    public client: DiscordJS.Client = new DiscordJS.Client();
-    public commands: Commands;
+    public dispatcher: EventEmitter = new EventEmitter()
+    public settings: QueenDecimSettings
+    public client: DiscordJS.Client = new DiscordJS.Client()
+    public commands: Commands
 
     constructor(settings: QueenDecimSettings){
         // Save settings
-        this.settings = settings;
-        this.commands = new Commands(this);
+        this.settings = settings
+        this.commands = new Commands(this)
 
         // Handle main messages
-        this.client.on("ready", () => this.handleBotReady().catch(this.handleBotError.bind(this)));
-        this.client.on("message", message => {
+        this.client.on('ready', () => this.handleBotReady().catch(this.handleBotError.bind(this)))
+        this.client.on('message', message => {
             this.handleNewMessage(message)
             .then(isCommand => {
                 if(isCommand)
-                    Logger(`The previous command has been executed.`);
+                    log(`The previous command has been executed.`)
             })
-            .catch(error => this.handleBotError(error, message));
-        });
-        this.client.on("disconnect", () => this.dispatcher.emit(Events.DISCONNECTED));
+            .catch(error => this.handleBotError(error, message))
+        })
+        this.client.on('disconnect', () => this.dispatcher.emit(Events.DISCONNECTED))
     }
 
-    public logIn(): Promise<string> { return this.client.login(this.settings.token); }
-    public logOut(): Promise<any> { return this.client.destroy(); }
+    public logIn(): Promise<string> { return this.client.login(this.settings.token) }
+    public logOut(): Promise<any> { return this.client.destroy() }
 
     private async handleBotError(error: any, message?: DiscordJS.Message){
-        Danger("An error has occured.");
-        this.dispatcher.emit(Events.ERROR, error);
+        log('An error has occured.')
+        this.dispatcher.emit(Events.ERROR, error)
 
         // Throw error in PM
-        if(this.settings.throwErrorPM === false) return false;
+        if(this.settings.throwErrorPM === false) return false
         let embed = new DiscordJS.RichEmbed()
-        .setColor("#C0392B")
-        .setFooter("See more details in console.")
-        .setTimestamp();
+        .setColor('#C0392B')
+        .setFooter('See more details in console.')
+        .setTimestamp()
             
         if(this.settings.ownerId){
             // Throw in PM
             embed
-            .setTitle("Internal server error")
-            .setDescription(error);
+            .setTitle('Internal server error')
+            .setDescription(error)
             await Promise.all([
                 this.client.users.get(this.settings.ownerId).send({ embed }),
-                message.channel.send("Thanks you, we just found a new error.")
-            ]);
+                message.channel.send('Thanks you, we just found a new error.')
+            ])
         } else {
             // Warning in the server
-            Danger("Please, set-up the OWNER option or disable throwErrorPM.");
-            embed.addField("Warning", "If you are the owner of this bot, please set-up the `owner` option with your ID, if it's not you, please alert him.");
-            embed.addField("Error reported", "The error has been reported in the console.");
-            await message.channel.send({ embed });
+            log('Please, set-up the OWNER option or disable throwErrorPM.')
+            embed.addField('Warning', 'If you are the owner of this bot, please set-up the `owner` option with your ID, if it\'s not you, please alert him.')
+            embed.addField('Error reported', 'The error has been reported in the console.')
+            await message.channel.send({ embed })
         }
     }
 
     private async handleBotReady(){
         // Update bot settings
-        Logger("QueenDecim is ready to fire.");
+        log(`%s is ready to fire.`, this.client.user.username)
 
         // Register commands from settings
         if(this.settings.commandsAutoRegister && this.settings.commands && this.settings.commands.length > 0){
-            Logger(this.settings.commands.length, "command(s) found.");            
-            await this.commands.register(this.settings.commands);
+            log('%d command(s) found.', this.settings.commands.length)            
+            await this.commands.register(this.settings.commands)
             if(this.settings.commandsAutoLoad)
-                await this.commands.loadRegistry();
+                await this.commands.loadRegistry()
         }
 
-        this.dispatcher.emit(Events.CONNECTED);
-        return true;
+        this.dispatcher.emit(Events.CONNECTED)
+        return true
     }
 
     private async handleNewMessage(message: DiscordJS.Message): Promise<boolean> {
-        if(!this.commands.isRequestMessage(message.content)) return false;
+        if(!this.commands.isRequestMessage(message.content)) return false
         
         // Send loading message
-        let loading = <DiscordJS.Message>await message.channel.send("Please wait while i execute the command...");
+        let loading = <DiscordJS.Message>await message.channel.send('Please wait while i execute the command...')
 
         // Execute the command
-        Logger("New command received", message.content);
+        log('New command received (%o).', { content: message.content })
         let runState = await this.commands.run(message)
         .catch(error => {
-            loading.delete();
-            throw new Error(error);
+            loading.delete()
+            throw new Error(error)
         })
-        if(!runState) message.reply("the command seems unexistant... try again.");
+        if(!runState) message.reply('the command seems unexistant... try again.')
 
         // Return the command result
-        await loading.edit(`Command executed.`);
-        loading.delete(2500);
-        return true;
+        await loading.edit(`Command executed.`)
+        loading.delete(2500)
+        return true
     }
 }
 
-export { DiscordJS, Client, CommandModel, Events };
+export { DiscordJS, Client, CommandModel, Events }

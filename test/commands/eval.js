@@ -3,7 +3,8 @@ class EvalCommand extends CommandModel {
     constructor(client){
         super(client, {
             name: "eval",
-            description: "Debug command"
+            description: "Debug command",
+            aliases: ["e"]
         })
     }
 
