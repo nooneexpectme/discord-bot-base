@@ -5,9 +5,9 @@
     ],
     "jsRules": {},
     "rules": {
-        "semicolon": [false, "always"],
+        "semicolon": [true, "never"],
         "curly": false,
-        "quotemark": false,
+        "quotemark": [true, "single"],
         "ordered-imports": false,
         "trailing-comma": false,
         "object-literal-sort-keys": false,
