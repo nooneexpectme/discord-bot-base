@@ -1,4 +1,5 @@
-const { CommandModel } = require("../../dist");
+const { CommandModel } = require("../../dist/model/command")
+
 class EvalCommand extends CommandModel {
     constructor(client){
         super(client, {
@@ -9,8 +10,9 @@ class EvalCommand extends CommandModel {
     }
 
     async run(message, args){
-        eval(args.join(""));
-        message.reply("the script has been executed, check the working console.");
+        eval(args.join(""))
+        message.reply("the script has been executed, check the working console.")
     }
 }
-module.exports = EvalCommand;
+
+module.exports = EvalCommand

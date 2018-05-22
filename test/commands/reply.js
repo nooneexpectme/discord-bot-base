@@ -1,4 +1,5 @@
-const { CommandModel } = require("../../dist");
+const { CommandModel } = require("../../dist/model/command")
+
 class ReplyCommand extends CommandModel {
     constructor(client){
         super(client, {
@@ -10,13 +11,14 @@ class ReplyCommand extends CommandModel {
                 { name: "display", value: new RegExp(/(true|false|0|1)/, "g"), type: Boolean }
             ],
             aliases: ["r"]
-        });
+        })
     }
 
     async run(message, args){
-        console.log("reply", args);
-        message.reply("replying from REPLY command.");
-        return true;
+        console.log("reply", args)
+        message.reply("replying from REPLY command.")
+        return true
     }
 }
-module.exports = ReplyCommand;
+
+module.exports = ReplyCommand
