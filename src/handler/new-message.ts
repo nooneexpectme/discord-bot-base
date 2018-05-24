@@ -5,15 +5,15 @@ import * as Debug from 'debug'
 const log = Debug('qd:handler:message')
 
 // Method
-export async function HandleNewMessage(message: Message): Promise<boolean> {
-    if (!this.registry.isRequestMessage(message.content)) return false
+export async function HandleNewMessage(client: Client, message: Message): Promise<boolean> {
+    if (!client.registry.isRequestMessage(message.content)) return false
 
     // Send loading message
     const loading = <Message> await message.channel.send('Please wait while i execute the command...')
 
     // Execute the command
     log('New command received (%o).', { content: message.content })
-    const state = await this.registry.run(message)
+    const state = await client.registry.run(message)
     .catch(error => {
         loading.delete()
         throw new Error(error)

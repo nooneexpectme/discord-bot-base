@@ -31,7 +31,7 @@ export { Events }
 class Client {
     public dispatcher: EventEmitter = new EventEmitter()
     public settings: QueenDecimSettings
-    public client: DJSClient = new DJSClient()
+    public discord: DJSClient = new DJSClient()
     public registry: Registry
 
     constructor(settings: QueenDecimSettings) {
@@ -40,21 +40,21 @@ class Client {
         this.listenEvents()
     }
 
-    public logIn(): Promise<string> { return this.client.login(this.settings.token) }
-    public logOut(): Promise<void> { return this.client.destroy() }
+    public logIn(): Promise<string> { return this.discord.login(this.settings.token) }
+    public logOut(): Promise<void> { return this.discord.destroy() }
 
     private listenEvents(): void {
         log('Listen events.')
-        this.client.on('ready', () => HandleBotReady(this).catch(HandleBotError.bind(this)))
-        this.client.on('message', message => {
-            HandleNewMessage(message)
+        this.discord.on('ready', () => HandleBotReady(this).catch(error => HandleBotError(this, error)))
+        this.discord.on('message', message => {
+            HandleNewMessage(this, message)
             .then(isCommand => {
                 if (isCommand)
                     log(`The previous command has been executed.`)
             })
-            .catch(error => HandleBotError(error, message))
+            .catch(error => HandleBotError(this, error, message))
         })
-        this.client.on('disconnect', () => this.dispatcher.emit(Events.DISCONNECTED))
+        this.discord.on('disconnect', () => this.dispatcher.emit(Events.DISCONNECTED))
     }
 }
 
