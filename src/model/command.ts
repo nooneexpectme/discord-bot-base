@@ -18,7 +18,7 @@ export class CommandModel {
         return true
     }
 
-    public async run(message: Message, args: any[]): Promise<boolean> {
+    public async run(message: Message, args: any): Promise<boolean> {
         message.reply('Default command initialized, please set-up the run function.')
         return true
     }

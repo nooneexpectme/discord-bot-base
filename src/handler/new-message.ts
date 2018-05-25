@@ -13,24 +13,9 @@ export async function HandleNewMessage(client: Client, message: Message): Promis
 
     // Do the job
     const request = client.registry.command.getRequestFromMessage(message)
-    await message.channel.send(JSON.stringify(request))
+    await Promise.all([
+        message.channel.send(JSON.stringify(request.parameters)),
+        request.command.run(message, request.parameters)
+    ])
     return true
-    /*
-    // Send loading message
-    const loading = <Message> await message.channel.send('Please wait while i execute the command...')
-
-    // Execute the command
-    log('New command received (%o).', { content: message.content })
-    const state = await client.registry.run(message)
-    .catch(error => {
-        loading.delete()
-        throw new Error(error)
-    })
-    if (!state) message.reply('the command seems unexistant... try again.')
-
-    // Return the command result
-    await loading.edit(`Command executed.`)
-    loading.delete(2500)
-    return true
-    */
 }
