@@ -1,16 +1,16 @@
 const { CommandModel } = require('../../../dist/commands')
 
 class EvalCommand extends CommandModel {
-    constructor(client){
+    constructor(client) {
         super(client, {
             name: 'eval',
             description: 'Debug command',
-            aliases: ['e']
+            aliases: [ 'e' ]
         })
     }
 
-    async run(message, args){
-        eval(args.join(''))
+    async run(message, args) {
+        eval(args)
         message.reply('the script has been executed, check the working console.')
     }
 }

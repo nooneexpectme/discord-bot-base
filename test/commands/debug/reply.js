@@ -6,18 +6,22 @@ class ReplyCommand extends CommandModel {
             name: 'reply',
             description: 'Reply to the user',
             parameters: [
-                { name: 'text', value: new RegExp(/"(.+)"/, "g"), type: String },
-                { name: 'nbr', value: new RegExp(/([0-9]+)/, "g"), type: Number },
-                { name: 'display', value: new RegExp(/(true|false|0|1)/, "g"), type: Boolean }
+                { name: 'text', regEx: new RegExp(/"(.+)"/, 'g'), type: String },
+                { name: 'nbr', regEx: new RegExp(/([0-9]+)/, 'g'), type: Number },
+                { name: 'display', regEx: new RegExp(/(true|false|0|1)/, 'g'), type: Boolean }
             ],
-            aliases: ["r"]
+            aliases: [ 'r' ]
         })
     }
 
-    async run(message, args){
-        console.log('reply', args)
-        message.reply('replying from REPLY command.')
-        return true
+    async run(message, { text, nbr, display }){
+        console.log(`Reply "${text}" ${nbr} times (display: ${display ? 'true': 'false'}).`)
+        if (!display) return
+        const replies = []
+        for (let i = 0; i < nbr; i++) {
+            replies.push(message.reply(text.toString()))
+        }
+        return await Promise.all(replies)
     }
 }
 
