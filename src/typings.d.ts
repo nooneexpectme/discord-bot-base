@@ -2,9 +2,6 @@ interface QueenDecimSettings {
     token: string,
     prefix: string,
     ownerId?: string,
-    commands?: string[],
-    commandsAutoRegister?: boolean,
-    commandsAutoLoad?: boolean,
     throwErrorPM?: boolean
 }
 
