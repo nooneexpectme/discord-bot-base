@@ -1,13 +1,21 @@
 // Imports
-import { Message } from 'discord.js'
 import { Client } from '@root/.'
+import { Message } from 'discord.js'
+
+// Debug
 import * as Debug from 'debug'
 const log = Debug('qd:handler:message')
 
 // Method
 export async function HandleNewMessage(client: Client, message: Message): Promise<boolean> {
-    if (!client.registry.isRequestMessage(message.content)) return false
+    // Ignore messages from the bot
+    if (message.author.id === client.discord.user.id) return false
 
+    // Do the job
+    const request = client.registry.command.getRequestFromMessage(message)
+    await message.channel.send(JSON.stringify(request))
+    return true
+    /*
     // Send loading message
     const loading = <Message> await message.channel.send('Please wait while i execute the command...')
 
@@ -24,4 +32,5 @@ export async function HandleNewMessage(client: Client, message: Message): Promis
     await loading.edit(`Command executed.`)
     loading.delete(2500)
     return true
+    */
 }
