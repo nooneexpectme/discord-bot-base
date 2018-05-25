@@ -7,16 +7,16 @@ I have never used another framework, so i'm writing this one only with my ideas 
 
 ## Example (minimal)
 ```js
-const QueenDecim = require("@tanuki/discord-bot-base");
+const { Client } = require('@tanuki/discord-bot-base');
 
-const Client = new QueenDecim.Client({
+const QueenDecim = new Client({
     token: null,
     ownerId: null,
     prefix: null
 });
 
-Client.logIn().then(() => {
-    console.log("I'm ready yuh!");
+QueenDecim.logIn().then(() => {
+    console.log('Yo.');
 })
 ```
 [See complete example on GitHub.](https://github.com/nooneexpectme/discord-bot-base/tree/dev/test)
