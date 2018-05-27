@@ -48,22 +48,22 @@ export function queryParser(
 
     // Retrieve parameters
     const cmdArgs = { requestContent: reqArgs }
-    if (Array.isArray(cmdInstance.settings.parameters)) {
+    if (Array.isArray(cmdInstance.settings.args)) {
         // Check if we have enough args
-        if (cmdInstance.settings.parameters.length > reqArgsList.length) {
+        if (cmdInstance.settings.args.length > reqArgsList.length) {
             request.error = CommandRequestError.NOT_ENOUGH_ARGS
             return request
         }
 
         // Save and check args
-        for (let i = 0; i < cmdInstance.settings.parameters.length; i++) {
-            const parameter = cmdInstance.settings.parameters[i]
-            cmdArgs[parameter.name] = new parameter.type(reqArgsList[i])
+        for (let i = 0; i < cmdInstance.settings.args.length; i++) {
+            const arg = cmdInstance.settings.args[i]
+            cmdArgs[arg.name] = new arg.type(reqArgsList[i])
         }
     }
 
     // Update and return request
     request.command = cmdInstance
-    request.parameters = cmdArgs
+    request.args = cmdArgs
     return request
 }

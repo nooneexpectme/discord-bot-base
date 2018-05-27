@@ -9,6 +9,6 @@ export enum CommandRequestError {
 
 export class CommandRequest {
     public command: CommandBase
-    public parameters: {[key: string]: any} = {}
+    public args: {[key: string]: any} = {}
     public error: CommandRequestError = CommandRequestError.NO_ERROR
 }

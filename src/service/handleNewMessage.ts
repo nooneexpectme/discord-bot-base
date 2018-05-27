@@ -21,6 +21,6 @@ export async function handleNewMessage(client: Client, message: Message): Promis
         return false
     }
 
-    await request.command.run(message, request.parameters)
+    await request.command.run(message, request.args)
     return true
 }

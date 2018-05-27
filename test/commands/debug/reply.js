@@ -5,7 +5,7 @@ class ReplyCommand extends CommandBase {
         super(client, {
             name: 'reply',
             description: 'Reply to the user',
-            parameters: [
+            args: [
                 { name: 'text', type: String },
                 { name: 'nbr', type: Number },
                 { name: 'display', type: Boolean }
