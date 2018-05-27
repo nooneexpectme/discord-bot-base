@@ -17,7 +17,7 @@ export const regExpValidators = {
 }
 
 // Method
-export function getRequestFromMessage(
+export function queryParser(
     client: Client,
     message: Message
 ): CommandRequest {
@@ -34,33 +34,36 @@ export function getRequestFromMessage(
     }
 
     // Retrieve command name and args list
-    const [, cmdName, cmdArgsStr] = message.content.match(commandIdentifier)
-    const cmdArgsList = cmdArgsStr
+    const [, reqCommand, reqArgs] = message.content.match(commandIdentifier)
+    const reqArgsList = reqArgs
         .match(regExpValidators.retrieveArgs)
         .map(arg => arg.replace(regExpValidators.escapeQuotes, ''))
 
     // Check if the command exists
-    const cmdInstance = client.registry.command.get(cmdName)
+    const cmdInstance = client.registry.command.get(reqCommand)
     if (cmdInstance === null) {
         request.error = CommandRequestError.UNDEFINED_COMMAND
         return request
     }
 
-    // Check if we have the right arguments
-    if (cmdInstance.settings.parameters.length > cmdArgsList.length) {
-        request.error = CommandRequestError.NOT_ENOUGH_ARGS
-        return request
+    // Retrieve parameters
+    const cmdArgs = { requestContent: reqArgs }
+    if (Array.isArray(cmdInstance.settings.parameters)) {
+        // Check if we have enough args
+        if (cmdInstance.settings.parameters.length > reqArgsList.length) {
+            request.error = CommandRequestError.NOT_ENOUGH_ARGS
+            return request
+        }
+
+        // Save and check args
+        for (let i = 0; i < cmdInstance.settings.parameters.length; i++) {
+            const parameter = cmdInstance.settings.parameters[i]
+            cmdArgs[parameter.name] = new parameter.type(reqArgsList[i])
+        }
     }
 
-    // Save and check arguments
-    const cmdParameters = {}
-    for (let i = 0; i < cmdInstance.settings.parameters.length; i++) {
-        const parameter = cmdInstance.settings.parameters[i]
-        cmdParameters[parameter.name] = new parameter.type(cmdArgsList[i])
-    }
-
-    // Build and return request
+    // Update and return request
     request.command = cmdInstance
-    request.parameters = cmdParameters
+    request.parameters = cmdArgs
     return request
 }

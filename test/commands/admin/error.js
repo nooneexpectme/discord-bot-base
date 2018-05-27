@@ -9,8 +9,8 @@ class ErrorCommand extends CommandBase {
         })
     }
 
-    async run(message, args){
-        throw new Error(...args)
+    async run(message, { requestContent }){
+        throw new Error(requestContent)
         message.reply('Error throwed.')
         return true
     }

@@ -9,8 +9,8 @@ class EvalCommand extends CommandBase {
         })
     }
 
-    async run(message, args) {
-        eval(args)
+    async run(message, { requestContent }) {
+        eval(requestContent)
         message.reply('the script has been executed, check the working console.')
     }
 }

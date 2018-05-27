@@ -1,7 +1,7 @@
 // Imports
 import { Client } from '@root/index'
 import { Message } from 'discord.js'
-import { getRequestFromMessage } from '@service/getRequestFromMessage'
+import { queryParser } from '@service/queryParser'
 import { CommandRequestError } from '@model/CommandRequest'
 
 // Debug
@@ -14,7 +14,7 @@ export async function handleNewMessage(client: Client, message: Message): Promis
     if (message.author.id === client.discord.user.id) return false
 
     // Do the job
-    const request = getRequestFromMessage(client, message)
+    const request = queryParser(client, message)
 
     if (request.error !== CommandRequestError.NO_ERROR) {
         log('Error: %s.', request.error)
