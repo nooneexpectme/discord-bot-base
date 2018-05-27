@@ -11,9 +11,9 @@ import { Client as DJSClient, Message, RichEmbed } from 'discord.js'
 import Registry from './registry'
 
 // Handlers imports
-import { HandleBotError } from './handler/bot-error'
-import { HandleBotReady } from './handler/bot-ready'
-import { HandleNewMessage } from './handler/new-message'
+import { handleBotError } from './service/handleBotError'
+import { handleBotReady } from './service/handleBotReady'
+import { handleNewMessage } from './service/handleNewMessage'
 
 // Debug
 import * as debug from 'debug'
@@ -45,14 +45,14 @@ class Client {
 
     private listenEvents(): void {
         log('Listen events.')
-        this.discord.on('ready', () => HandleBotReady(this).catch(error => HandleBotError(this, error)))
+        this.discord.on('ready', () => handleBotReady(this).catch(error => handleBotError(this, error)))
         this.discord.on('message', message => {
-            HandleNewMessage(this, message)
+            handleNewMessage(this, message)
             .then(isCommand => {
                 if (isCommand)
                     log(`The previous command has been executed.`)
             })
-            .catch(error => HandleBotError(this, error, message))
+            .catch(error => handleBotError(this, error, message))
         })
         this.discord.on('disconnect', () => this.dispatcher.emit(Events.DISCONNECTED))
     }

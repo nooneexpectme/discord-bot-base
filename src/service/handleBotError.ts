@@ -5,7 +5,7 @@ import * as Debug from 'debug'
 const log = Debug('qd:handler:error')
 
 // Method
-export async function HandleBotError(client: Client, error: any, message?: Message) {
+export async function handleBotError(client: Client, error: any, message?: Message) {
     log('An error has occured.')
     client.dispatcher.emit(Events.ERROR, error)
 

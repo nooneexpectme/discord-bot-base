@@ -1,7 +1,7 @@
 import { Message } from 'discord.js'
 import { Client } from '@root/.'
 
-export class CommandModel {
+export class CommandBase {
     public settings: CommandSettings
     private client: Client
 

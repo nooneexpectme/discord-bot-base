@@ -1,6 +1,6 @@
-const { CommandModel } = require('../../../dist/commands')
+const { CommandBase } = require('../../../dist/model/CommandBase')
 
-class EvalCommand extends CommandModel {
+class EvalCommand extends CommandBase {
     constructor(client) {
         super(client, {
             name: 'eval',
