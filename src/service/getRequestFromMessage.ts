@@ -5,7 +5,7 @@
  */
 
 // Imports
-import { Client } from '@root/.'
+import { Client } from '@root/index'
 import { Message } from 'discord.js'
 import { CommandRequest, CommandRequestError } from '@root/model/CommandRequest'
 

@@ -1,5 +1,5 @@
 import { Message } from 'discord.js'
-import { Client } from '@root/.'
+import { Client } from '@root/index'
 
 export class CommandBase {
     public settings: CommandSettings

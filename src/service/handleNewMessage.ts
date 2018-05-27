@@ -1,8 +1,8 @@
 // Imports
-import { Client } from '@root/.'
+import { Client } from '@root/index'
 import { Message } from 'discord.js'
-import { getRequestFromMessage } from './getRequestFromMessage'
-import { CommandRequestError } from '@root/model/CommandRequest'
+import { getRequestFromMessage } from '@service/getRequestFromMessage'
+import { CommandRequestError } from '@model/CommandRequest'
 
 // Debug
 import * as Debug from 'debug'

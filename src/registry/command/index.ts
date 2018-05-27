@@ -1,8 +1,6 @@
 // Imports
-import { Client } from '@root/.'
-import { CommandBase } from '@root/model/CommandBase'
-import { CommandRequest, CommandRequestError } from '@root/model/CommandRequest'
-import { Message } from 'discord.js'
+import { Client } from '@root/index'
+import { CommandBase } from '@model/CommandBase'
 
 // Debug
 import * as Debug from 'debug'

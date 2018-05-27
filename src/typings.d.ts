@@ -14,6 +14,5 @@ interface CommandSettings {
 
 interface CommandSettingsParameter {
     name: string
-    regEx: RegExp
     type?: any
 }

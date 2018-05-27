@@ -2,18 +2,19 @@
 import { addAliases as ModuleAliases } from 'module-alias'
 ModuleAliases({
     '@root': __dirname,
-    '@utils': __dirname + '/utils'
+    '@service': __dirname + '/service',
+    '@model': __dirname + '/model'
 })
 
 // Core imports
 import { EventEmitter } from 'events'
-import { Client as DJSClient, Message, RichEmbed } from 'discord.js'
-import Registry from './registry'
+import { Client as DJSClient, Message } from 'discord.js'
+import Registry from '@root/registry'
 
 // Handlers imports
-import { handleBotError } from './service/handleBotError'
-import { handleBotReady } from './service/handleBotReady'
-import { handleNewMessage } from './service/handleNewMessage'
+import { handleBotError } from '@service/handleBotError'
+import { handleBotReady } from '@service/handleBotReady'
+import { handleNewMessage } from '@service/handleNewMessage'
 
 // Debug
 import * as debug from 'debug'

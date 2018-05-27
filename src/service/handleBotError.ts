@@ -1,6 +1,8 @@
 // Imports
-import { Message, RichEmbed } from 'discord.js'
-import { Client, Events } from '@root/.'
+import { Message, RichEmbed } from 'discord.js'
+import { Client, Events } from '@root/index'
+
+// Debug
 import * as Debug from 'debug'
 const log = Debug('qd:handler:error')
 

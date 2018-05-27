@@ -1,4 +1,4 @@
-import { CommandBase } from './CommandBase'
+import { CommandBase } from '@model/CommandBase'
 
 export enum CommandRequestError {
     NO_ERROR = 'NoError',
