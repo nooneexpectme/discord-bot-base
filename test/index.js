@@ -10,7 +10,9 @@ const
 const QueenDecim = new Client({
     token: process.argv[2] || BOT_TOKEN,
     prefix: '!',
-    ownerId: process.argv[3] || OWNER_ID
+    ownerId: process.argv[3] || OWNER_ID,
+    throwErrorPM: true,
+    throwErrorChannel: true
 })
 
 // Register commands
@@ -22,7 +24,10 @@ QueenDecim.registry.command
 // Register dispatcher events
 QueenDecim.dispatcher
     .on(Events.CONNECTED, () => { console.log('STARTED') })
-    .on(Events.ERROR, error => { console.error('ERROR', error) })
+    .on(Events.ERROR, error => {
+        const { throwErrorPM = false, throwErrorChannel = false } = QueenDecim.settings
+        console.error(`Error (PM: ${throwErrorPM}, Channel: ${throwErrorChannel})`)
+    })
     .on(Events.DISCONNECTED, () => { console.log('DISCONNECTED') });
 
 // Log the bot

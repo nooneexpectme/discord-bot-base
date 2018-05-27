@@ -3,6 +3,7 @@ interface QueenDecimSettings {
     prefix: string
     ownerId?: string
     throwErrorPM?: boolean
+    throwErrorChannel?: boolean
 }
 
 interface CommandSettings {
