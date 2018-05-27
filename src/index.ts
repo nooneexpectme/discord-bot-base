@@ -3,7 +3,8 @@ import { addAliases as ModuleAliases } from 'module-alias'
 ModuleAliases({
     '@root': __dirname,
     '@service': __dirname + '/service',
-    '@model': __dirname + '/model'
+    '@model': __dirname + '/model',
+    '@embed': __dirname + '/embed'
 })
 
 // Core imports

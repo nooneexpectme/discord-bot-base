@@ -1,37 +1,26 @@
 // Imports
 import { Message, RichEmbed } from 'discord.js'
 import { Client, Events } from '@root/index'
+import { internalServerErrorEmbed } from '@embed/internalServerError'
+import { missingOwnerIdEmbed } from '@embed/missingOwnerId'
 
 // Debug
 import * as Debug from 'debug'
 const log = Debug('qd:handler:error')
 
 // Method
-export async function handleBotError(client: Client, error: any, message?: Message) {
+export async function handleBotError(client: Client, error: any, message?: Message): Promise<void> {
     log('An error has occured.')
     client.dispatcher.emit(Events.ERROR, error)
+    message.reply('sorry, i can\'t run you\'re command.')
 
     // Throw error in PM
-    if (client.settings.throwErrorPM === false) return false
-    const embed = new RichEmbed()
-    .setColor('#C0392B')
-    .setFooter('See more details in console.')
-    .setTimestamp()
-
-    if (client.settings.ownerId) {
-        // Throw in PM
-        embed
-        .setTitle('Internal server error')
-        .setDescription(error)
-        await Promise.all([
-            client.discord.users.get(client.settings.ownerId).send({ embed }),
-            message.channel.send('Thanks you, we just found a new error.')
-        ])
-    } else {
-        // Warning in the server
-        log('Please, set-up the OWNER option or disable throwErrorPM.')
-        embed.addField('Warning', 'If you are the owner of client bot, please set-up the `owner` option with your ID, if it\'s not you, please alert him.')
-        embed.addField('Error reported', 'The error has been reported in the console.')
-        await message.channel.send({ embed })
+    if (client.settings.throwErrorPM !== false) {
+        if (!client.settings.ownerId) message.channel.send({ embed: missingOwnerIdEmbed() })
+        else {
+            client.discord.users
+                .get(client.settings.ownerId)
+                .send({ embed: internalServerErrorEmbed(error) })
+        }
     }
 }

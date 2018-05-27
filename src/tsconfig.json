@@ -15,7 +15,8 @@
         "paths": {
             "@root/*": ["./*"],
             "@service/*": ["./service/*"],
-            "@model/*": ["./model/*"]
+            "@model/*": ["./model/*"],
+            "@embed/*": ["./embed/*"]
         }
     }
 }
