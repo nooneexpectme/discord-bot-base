@@ -21,11 +21,11 @@ QueenDecim.registry.command
 
 // Register dispatcher events
 QueenDecim.dispatcher
-.on(Events.CONNECTED, () => { console.log('STARTED') })
-.on(Events.ERROR, error => { console.error('ERROR', error) })
-.on(Events.DISCONNECTED, () => { console.log('DISCONNECTED') });
+    .on(Events.CONNECTED, () => { console.log('STARTED') })
+    .on(Events.ERROR, error => { console.error('ERROR', error) })
+    .on(Events.DISCONNECTED, () => { console.log('DISCONNECTED') });
 
 // Log the bot
 QueenDecim.logIn()
-.then(() => console.log('Application done'))
-.catch(console.error)
+    .then(() => console.log('Application done'))
+    .catch(console.error)

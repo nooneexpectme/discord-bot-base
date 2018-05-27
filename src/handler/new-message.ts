@@ -13,9 +13,6 @@ export async function HandleNewMessage(client: Client, message: Message): Promis
 
     // Do the job
     const request = client.registry.command.getRequestFromMessage(message)
-    await Promise.all([
-        message.channel.send(JSON.stringify(request.parameters)),
-        request.command.run(message, request.parameters)
-    ])
+    await request.command.run(message, request.parameters)
     return true
 }

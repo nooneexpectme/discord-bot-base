@@ -6,9 +6,9 @@ class ReplyCommand extends CommandModel {
             name: 'reply',
             description: 'Reply to the user',
             parameters: [
-                { name: 'text', regEx: new RegExp(/"(.+)"/, 'g'), type: String },
-                { name: 'nbr', regEx: new RegExp(/([0-9]+)/, 'g'), type: Number },
-                { name: 'display', regEx: new RegExp(/(true|false|0|1)/, 'g'), type: Boolean }
+                { name: 'text', type: String },
+                { name: 'nbr', type: Number },
+                { name: 'display', type: Boolean }
             ],
             aliases: [ 'r' ]
         })

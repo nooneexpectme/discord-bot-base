@@ -30,28 +30,33 @@ export class RegistryCommand {
     }
 
     public getRequestFromMessage(message: Message): { command: CommandModel, parameters: any } {
-        // Block messages from the bot
-        if (!message.content.startsWith(this.client.settings.prefix)) return null
-
-        // Check if it's a valid command
+        // Required information for regular expressions
         const prefix = this.client.settings.prefix
         const commandNames = Object.keys(this.list)
+
+        // Init regular expressions
+        // Thanks to https://github.com/Shinobu1337/discord-command-parser/blob/master/src/regexps.js
         const validatorRegEx = (new RegExp(`^${prefix}(${commandNames.join('|')}) (.+)?`))
-        const isDefinedCommand = validatorRegEx.test(message.content)
-        if (!isDefinedCommand) return null
+        const argsRegEx = new RegExp(/"[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*'|```((.|\s)*?)```|\S+/g)
+        const quoteStripRegEx = new RegExp(/^"|"$|^'|'$|^```(\S*\n?)|```$/g)
 
-        // Retrieve command name + instance
+        // Check if it's a registered command
+        const isRegisteredCommand = validatorRegEx.test(message.content)
+        if (!isRegisteredCommand) return null
+
+        // Retrieve command name, args, instance
         const [, cmdName, cmdArgs] = message.content.match(validatorRegEx)
-        const command = this.list[cmdName]
+        const cmdInstance = this.list[cmdName]
+        const args = cmdArgs.match(argsRegEx).map(v => v.replace(quoteStripRegEx, ''))
+        if (cmdInstance.settings.parameters.length > args.length) return null
+        const parameters = []
 
-        // Retrieve parameters
-        const parameters = {}
-        for (const { name, regEx, type = String } of command.settings.parameters) {
-            const [, value] = regEx.exec(message.content)
-            parameters[name] = new type(value)
+        for (let i = 0; i < cmdInstance.settings.parameters.length; i++) {
+            const parameter = cmdInstance.settings.parameters[i]
+            parameters[parameter.name] = new parameter.type(args[i])
         }
 
         // Return informations
-        return { command, parameters }
+        return { command: cmdInstance, parameters }
     }
 }
