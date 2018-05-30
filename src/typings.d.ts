@@ -8,7 +8,9 @@ interface QueenDecimSettings {
 
 interface CommandSettings {
     name: string
+    group: string
     description: string
+    details?: string
     args?: CommandSettingsParameter[]
     aliases?: string[]
 }
