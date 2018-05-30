@@ -10,16 +10,15 @@ export class CommandBase {
         this.settings = settings
     }
 
-    public async load(): Promise<boolean> {
-        return true
+    public async load(): Promise<void> {
+        return
     }
 
-    public async unload(): Promise<boolean> {
-        return true
+    public async unload(): Promise<void> {
+        return
     }
 
-    public async run(message: Message, args: any): Promise<boolean> {
+    public async run(message: Message, args: any): Promise<void> {
         message.reply('Default command initialized, please set-up the run function.')
-        return true
     }
 }

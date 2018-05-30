@@ -11,7 +11,7 @@ import { CommandRequest, CommandRequestError } from '@root/model/CommandRequest'
 
 // Exports regular expression validators
 export const regExpValidators = {
-    commandIdentifier: (prefix, names) => new RegExp(`^${prefix}(${names.join('|')}) (.+)?`),
+    commandIdentifier: (prefix, names) => new RegExp(`^${prefix}(${names.join('|')})\s?(.+)?`),
     retrieveArgs: new RegExp(/"[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*'|```((.|\s)*?)```|\S+/g),
     escapeQuotes: new RegExp(/^"|"$|^'|'$|^```(\S*\n?)|```$/g)
 }
@@ -29,13 +29,13 @@ export function queryParser(
 
     // Check if it's a registered command
     if (!commandIdentifier.test(message.content)) {
-        request.error = CommandRequestError.NOT_A_COMMAND
+        request.error = CommandRequestError.UNDEFINED_COMMAND
         return request
     }
 
     // Retrieve command name and args list
     const [, reqCommand, reqArgs] = message.content.match(commandIdentifier)
-    const reqArgsList = reqArgs
+    const reqArgsList = reqArgs === undefined ? [] : reqArgs
         .match(regExpValidators.retrieveArgs)
         .map(arg => arg.replace(regExpValidators.escapeQuotes, ''))
 
@@ -52,13 +52,12 @@ export function queryParser(
         // Check if we have enough args
         if (cmdInstance.settings.args.length > reqArgsList.length) {
             request.error = CommandRequestError.NOT_ENOUGH_ARGS
-            return request
-        }
-
-        // Save and check args
-        for (let i = 0; i < cmdInstance.settings.args.length; i++) {
-            const arg = cmdInstance.settings.args[i]
-            cmdArgs[arg.name] = new arg.type(reqArgsList[i])
+        } else {
+            // Save and check args
+            for (let i = 0; i < cmdInstance.settings.args.length; i++) {
+                const arg = cmdInstance.settings.args[i]
+                cmdArgs[arg.name] = new arg.type(reqArgsList[i])
+            }
         }
     }
 

@@ -36,7 +36,7 @@ export class RegistryCommand {
         }
 
         this.list[command.settings.name] = command
-        log('Command registered (%o).', { name: command.settings.name, path })
+        log('Command registered (%o).', { group: command.settings.group || null, name: command.settings.name })
         return this
     }
 }
