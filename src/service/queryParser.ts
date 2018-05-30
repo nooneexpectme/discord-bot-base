@@ -17,10 +17,10 @@ export const regExpValidators = {
 }
 
 // Method
-export async function queryParser(
+export function queryParser(
     client: Client,
     message: Message
-): Promise<CommandRequest> {
+): CommandRequest {
     const request = new CommandRequest()
     const commandIdentifier = regExpValidators.commandIdentifier(
         client.settings.prefix,
@@ -57,7 +57,7 @@ export async function queryParser(
             for (let i = 0; i < cmdInstance.settings.args.length; i++) {
                 const arg = cmdInstance.settings.args[i]
                 const typedArg = new arg.type(reqArgsList[i])
-                if (arg.validator && (await arg.validator(typedArg) !== true)) {
+                if (arg.validator && arg.validator(typedArg) !== true) {
                     request.error = CommandRequestError.INVALID_ARG
                     return request
                 }
