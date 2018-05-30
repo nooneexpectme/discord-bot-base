@@ -7,8 +7,8 @@ export enum CommandRequestError {
 }
 
 export class CommandRequest {
-    public commandName: string
     public command: CommandBase
     public args: {[key: string]: any} = {}
     public error: CommandRequestError = null
+    public validatorError?: string
 }

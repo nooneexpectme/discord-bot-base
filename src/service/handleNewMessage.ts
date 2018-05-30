@@ -7,6 +7,7 @@ import { CommandRequestError } from '@model/CommandRequest'
 // Embeds
 import { notEnoughArgsEmbed } from '@embed/notEnoughArgs'
 import { undefinedCommandEmbed } from '@embed/undefinedCommand'
+import { invalidArgEmbed } from '@embed/invalidArg'
 
 // Debug
 import * as Debug from 'debug'
@@ -21,17 +22,19 @@ export async function handleNewMessage(client: Client, message: Message): Promis
     const request = queryParser(client, message)
     log('Command request (%o).', { request: message.content })
 
-    // Error: UndefinedCommand
-    if (request.error === CommandRequestError.UNDEFINED_COMMAND) {
-        await message.channel.send({ embed: undefinedCommandEmbed(request) })
-        return false
+    // Switch error
+    switch (request.error) {
+        case CommandRequestError.UNDEFINED_COMMAND:
+            await message.channel.send({ embed: undefinedCommandEmbed(request) })
+            break
+        case CommandRequestError.NOT_ENOUGH_ARGS:
+            await message.channel.send({ embed: notEnoughArgsEmbed(client.settings.prefix, message, request) })
+            break
+        case CommandRequestError.INVALID_ARG:
+            await message.channel.send({ embed: invalidArgEmbed(request) })
+            break
     }
-
-    // Error: NotEnoughArgs
-    if (request.error === CommandRequestError.NOT_ENOUGH_ARGS) {
-        await message.channel.send({ embed: notEnoughArgsEmbed(client.settings.prefix, message, request) })
-        return false
-    }
+    if (request.error) return false
 
     // Everything is right, run the command
     await request.command.run(message, request.args)

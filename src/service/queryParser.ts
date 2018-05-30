@@ -57,9 +57,13 @@ export function queryParser(
             for (let i = 0; i < cmdInstance.settings.args.length; i++) {
                 const arg = cmdInstance.settings.args[i]
                 const typedArg = new arg.type(reqArgsList[i])
-                if (arg.validator && arg.validator(typedArg) !== true) {
-                    request.error = CommandRequestError.INVALID_ARG
-                    return request
+                if (arg.validator) {
+                    const [isSuccess, errorMsg] = arg.validator(typedArg)
+                    if (isSuccess) {
+                        request.error = CommandRequestError.INVALID_ARG
+                        request.validatorError = errorMsg
+                        return request
+                    }
                 }
                 cmdArgs[arg.name] = typedArg
             }
