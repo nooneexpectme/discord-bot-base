@@ -13,11 +13,13 @@ export function notEnoughArgsEmbed(prefix: string, message: Message, request: Co
         need: request.command.settings.args.map(a => a.name) || []
     })
 
+    const expected = '`' + prefix + request.command.settings.name + ' ' + request.command.settings.args.map(a => `<${a.name}>`).join(' ') + '`'
+    const actual = '`' + message.content + '`'
+
     return new RichEmbed()
-        .setTitle('Not enough args passed to the command.')
         .setColor('#EB9532')
-        .addField('Expected', '`' + prefix + request.command.settings.name + ' ' + request.command.settings.args.map(a => `<${a.name}>`).join(' ') + '`')
-        .addField('Actual', '`' + message.content + '`')
+        .setTitle('Not enough args passed to the command.')
+        .setDescription('The command expects the format `' + expected + '` and you are asking for `' + actual + '`.')
         .setFooter(message.author.username + '#' + message.author.discriminator)
         .setTimestamp()
 }
