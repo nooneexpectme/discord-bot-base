@@ -65,10 +65,10 @@ export function queryParser(
                 const typedArg = new arg.type(reqArgsList[i])
                 if (arg.validator) {
                     const [isSuccess, errorMsg] = arg.validator(typedArg)
-                    if (isSuccess) {
+                    if (!isSuccess) {
                         request.error = CommandRequestError.INVALID_ARG
                         request.validatorError = errorMsg
-                        return request
+                        break
                     }
                 }
                 cmdArgs[arg.name] = typedArg
