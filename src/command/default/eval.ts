@@ -9,7 +9,8 @@ module.exports = class EvalCommand extends CommandBase {
         super(client, {
             group: 'default',
             name: 'eval',
-            description: 'Evaluate a chunk of code'
+            description: 'Evaluate a chunk of code',
+            ownerOnly: true
         })
     }
 

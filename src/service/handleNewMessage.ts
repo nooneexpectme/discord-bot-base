@@ -33,6 +33,10 @@ export async function handleNewMessage(client: Client, message: Message): Promis
         case CommandRequestError.INVALID_ARG:
             await message.channel.send({ embed: invalidArgEmbed(request) })
             break
+        case CommandRequestError.NOT_ALLOWED:
+            if (message.deletable) await message.delete()
+            else await message.react(':no_entry_sign:')
+            break
     }
     if (request.error) return false
 

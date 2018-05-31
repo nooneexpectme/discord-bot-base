@@ -46,6 +46,12 @@ export function queryParser(
         return request
     }
 
+    // Setting: OwnerOnly
+    if (cmdInstance.settings.ownerOnly && message.author.id !== client.settings.ownerId) {
+        request.error = CommandRequestError.NOT_ALLOWED
+        return request
+    }
+
     // Retrieve parameters
     const cmdArgs = { requestContent: reqArgs }
     if (Array.isArray(cmdInstance.settings.args)) {

@@ -3,7 +3,8 @@ import { CommandBase } from '@model/CommandBase'
 export enum CommandRequestError {
     NOT_ENOUGH_ARGS = 'NotEnoughArgs',
     UNDEFINED_COMMAND = 'UndefinedCommand',
-    INVALID_ARG = 'InvalidArg'
+    INVALID_ARG = 'InvalidArg',
+    NOT_ALLOWED = 'NotAllowed'
 }
 
 export class CommandRequest {

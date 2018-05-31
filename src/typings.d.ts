@@ -13,6 +13,7 @@ interface CommandSettings {
     details?: string
     args?: CommandSettingsParameter[]
     aliases?: string[]
+    ownerOnly?: boolean
 }
 
 interface CommandSettingsParameter {
