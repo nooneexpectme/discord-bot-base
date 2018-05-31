@@ -14,9 +14,13 @@ module.exports = class HelpCommand extends CommandBase {
     }
 
     public async run(msg: Message): Promise<void> {
-        await msg.author.send({
-            embed: new RichEmbed()
-                .addField('test', 'test')
-        })
+        // Build the RichEmbed
+        const helpEmbed = new RichEmbed()
+            .addField('commands', this.client.registry.command.getNames())
+
+        // Send & delete
+        const promises = [ msg.author.send({ embed: helpEmbed }) ]
+        if (msg.deletable) promises.push(msg.delete())
+        await Promise.all(promises)
     }
 }

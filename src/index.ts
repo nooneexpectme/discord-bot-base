@@ -40,7 +40,6 @@ class Client {
         this.settings = settings
         this.registry = new Registry(this)
         this.listenEvents()
-        this.registry.command.register(require.resolve('./command/help'))
     }
 
     public logIn(): Promise<string> { return this.discord.login(this.settings.token) }

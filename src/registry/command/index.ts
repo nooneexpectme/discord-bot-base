@@ -39,4 +39,10 @@ export class RegistryCommand {
         log('Command registered (%o).', { group: command.settings.group || null, name: command.settings.name })
         return this
     }
+
+    public registerDefaults(): RegistryCommand {
+        return this
+            .register(require.resolve('@root/command/default/help'))
+            .register(require.resolve('@root/command/default/eval'))
+    }
 }

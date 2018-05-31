@@ -3,7 +3,7 @@ import { Client } from '@root/index'
 
 export class CommandBase {
     public settings: CommandSettings
-    private client: Client
+    protected client: Client
 
     constructor(client: Client, settings: CommandSettings) {
         this.client = client
