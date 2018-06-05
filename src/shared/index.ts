@@ -11,7 +11,7 @@ export default class Shared {
         return this
     }
 
-    public get<T>(key: string): (T|null) {
+    public get(key: string): any {
         if (!this.exists(key))
             return null
         return this.objects[key]
@@ -21,5 +21,9 @@ export default class Shared {
         if (this.exists(key))
             delete this.objects[key]
         return this
+    }
+
+    public getKeys(): string[] {
+        return Object.keys(this.objects)
     }
 }
