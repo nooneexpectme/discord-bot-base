@@ -5,9 +5,9 @@
  */
 
 // Imports
-import { Client } from '@root/index'
+import { Client } from '../'
 import { Message } from 'discord.js'
-import { CommandRequest, CommandRequestError } from '@root/model/CommandRequest'
+import { CommandRequest, CommandRequestError } from '../model/CommandRequest'
 
 // Exports regular expression validators
 export const regExpValidators = {

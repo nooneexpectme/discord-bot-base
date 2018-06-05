@@ -1,40 +1,29 @@
-// Register aliases
-import { addAliases as ModuleAliases } from 'module-alias'
-ModuleAliases({
-    '@root': __dirname,
-    '@service': __dirname + '/service',
-    '@model': __dirname + '/model',
-    '@embed': __dirname + '/embed'
-})
-
-// Core imports
+// Imports
 import { EventEmitter } from 'events'
 import { Client as DJSClient, Message } from 'discord.js'
-import Registry from '@root/registry'
-
-// Handlers imports
-import { handleBotError } from '@service/handleBotError'
-import { handleBotReady } from '@service/handleBotReady'
-import { handleNewMessage } from '@service/handleNewMessage'
-
-// Debug
+import Registry from './registry'
+import Shared from './shared'
+import { handleBotError } from './service/handleBotError'
+import { handleBotReady } from './service/handleBotReady'
+import { handleNewMessage } from './service/handleNewMessage'
 import * as debug from 'debug'
 const log = debug('qd:main')
 
-// Events
-const Events = {
+// Exports
+export { CommandBase } from './model/CommandBase'
+export const Events = {
     CONNECTED: 'ServerConnected',
     ERROR: 'ServerError',
     DISCONNECTED: 'ServerDisconnected'
 }
-export { Events }
 
 // Client
-class Client {
+export class Client {
     public dispatcher: EventEmitter = new EventEmitter()
     public settings: QueenDecimSettings
     public discord: DJSClient = new DJSClient()
     public registry: Registry
+    public shared: Shared = new Shared()
 
     constructor(settings: QueenDecimSettings) {
         this.settings = settings
@@ -59,5 +48,3 @@ class Client {
         this.discord.on('disconnect', () => this.dispatcher.emit(Events.DISCONNECTED))
     }
 }
-
-export { Client }

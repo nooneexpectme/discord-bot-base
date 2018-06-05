@@ -1,10 +1,8 @@
 // Imports
+import { Client, Events } from '../'
 import { Message, RichEmbed } from 'discord.js'
-import { Client, Events } from '@root/index'
-import { internalServerErrorEmbed } from '@embed/internalServerError'
-import { missingOwnerIdEmbed } from '@embed/missingOwnerId'
-
-// Debug
+import { internalServerErrorEmbed } from '../embed/internalServerError'
+import { missingOwnerIdEmbed } from '../embed/missingOwnerId'
 import * as Debug from 'debug'
 const log = Debug('qd:handler:error')
 

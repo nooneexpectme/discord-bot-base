@@ -1,6 +1,6 @@
 // Import
-import { CommandBase } from '@model/CommandBase'
-import { Client } from '@root/index'
+import { CommandBase } from '../../model/CommandBase'
+import { Client } from '../../'
 import { Message, RichEmbed } from 'discord.js'
 
 // Command

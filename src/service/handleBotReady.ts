@@ -1,7 +1,5 @@
 // Imports
-import { Events, Client } from '@root/index'
-
-// Debug
+import { Events, Client } from '../'
 import * as Debug from 'debug'
 const log = Debug('qd:handler:ready')
 

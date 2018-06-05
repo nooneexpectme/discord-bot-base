@@ -1,9 +1,9 @@
+import { Client } from '../'
 import { Message } from 'discord.js'
-import { Client } from '@root/index'
 
 export class CommandBase {
     public settings: CommandSettings
-    protected client: Client
+    public client: Client
 
     constructor(client: Client, settings: CommandSettings) {
         this.client = client

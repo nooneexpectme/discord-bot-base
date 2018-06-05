@@ -1,15 +1,11 @@
 // Imports
-import { Client } from '@root/index'
+import { Client } from '../'
 import { Message } from 'discord.js'
-import { queryParser } from '@service/queryParser'
-import { CommandRequestError } from '@model/CommandRequest'
-
-// Embeds
-import { notEnoughArgsEmbed } from '@embed/notEnoughArgs'
-import { undefinedCommandEmbed } from '@embed/undefinedCommand'
-import { invalidArgEmbed } from '@embed/invalidArg'
-
-// Debug
+import { queryParser } from '../service/queryParser'
+import { CommandRequestError } from '../model/CommandRequest'
+import { notEnoughArgsEmbed } from '../embed/notEnoughArgs'
+import { undefinedCommandEmbed } from '../embed/undefinedCommand'
+import { invalidArgEmbed } from '../embed/invalidArg'
 import * as Debug from 'debug'
 const log = Debug('qd:handler:message')
 

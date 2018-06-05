@@ -1,7 +1,5 @@
 // Imports
-import { Client } from '@root/.'
-
-// Registry managers
+import { Client } from '../'
 import { RegistryGroup } from './group'
 import { RegistryCommand } from './command'
 

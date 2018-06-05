@@ -1,8 +1,6 @@
 // Imports
-import { Client } from '@root/index'
-import { CommandBase } from '@model/CommandBase'
-
-// Debug
+import { Client } from '../../'
+import { CommandBase } from '../../model/CommandBase'
 import * as Debug from 'debug'
 const log = Debug('qd:registry:command')
 
@@ -42,7 +40,7 @@ export class RegistryCommand {
 
     public registerDefaults(): RegistryCommand {
         return this
-            .register(require.resolve('@root/command/default/help'))
-            .register(require.resolve('@root/command/default/eval'))
+            .register(require.resolve('../../command/default/help'))
+            .register(require.resolve('../../command/default/eval'))
     }
 }

@@ -1,4 +1,4 @@
-import { CommandBase } from '@model/CommandBase'
+import { CommandBase } from './CommandBase'
 
 export enum CommandRequestError {
     NOT_ENOUGH_ARGS = 'NotEnoughArgs',
