@@ -1,6 +1,6 @@
 // Import
 import { Message, RichEmbed } from 'discord.js'
-import { CommandRequest } from '@model/CommandRequest'
+import { CommandRequest } from '../model/CommandRequest'
 
 // Debug
 import * as Debug from 'debug'
