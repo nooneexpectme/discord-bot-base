@@ -1,16 +1,24 @@
-const { CommandBase } = require('../../../dist/model/CommandBase')
+const { CommandBase } = require('@tanuki/discord-bot-base')
 
 class ReplyCommand extends CommandBase {
     constructor(client){
         super(client, {
+            group: 'example',
             name: 'reply',
             description: 'Reply to the user',
             args: [
                 { name: 'text', type: String },
-                { name: 'nbr', type: Number },
+                {
+                    name: 'nbr',
+                    type: Number,
+                    validator: arg => {
+                        return arg > 5
+                            ? [ false, 'The maximum of replies are 5.' ]
+                            : [ true, null ]
+                    }
+                },
                 { name: 'display', type: Boolean }
-            ],
-            aliases: [ 'r' ]
+            ]
         })
     }
 

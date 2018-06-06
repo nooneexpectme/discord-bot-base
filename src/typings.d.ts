@@ -12,7 +12,6 @@ interface CommandSettings {
     description: string
     details?: string
     args?: CommandSettingsParameter[]
-    aliases?: string[]
     ownerOnly?: boolean
 }
 
