@@ -1,8 +1,6 @@
-// Import
+// Imports
 import { Message, RichEmbed } from 'discord.js'
 import { CommandRequest } from '../model/CommandRequest'
-
-// Debug
 import * as Debug from 'debug'
 const log = Debug('qd:embed:notEnoughArgs')
 

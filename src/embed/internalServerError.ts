@@ -1,7 +1,7 @@
 // Import
 import { RichEmbed } from 'discord.js'
 
-// Export embed
+// Export
 export function internalServerErrorEmbed(error: any): RichEmbed {
     return new RichEmbed()
         .setColor('#C0392B')

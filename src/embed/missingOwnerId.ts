@@ -1,7 +1,5 @@
-// Import
+// Imports
 import { RichEmbed } from 'discord.js'
-
-// Debug
 import * as Debug from 'debug'
 const log = Debug('qd:embed:missingOwnerId')
 

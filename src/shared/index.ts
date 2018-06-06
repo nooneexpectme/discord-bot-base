@@ -1,3 +1,4 @@
+// Class
 export default class Shared {
     private objects: { [key: string]: any } = {}
 

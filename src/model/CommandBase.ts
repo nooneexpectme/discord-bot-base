@@ -1,6 +1,8 @@
+// Imports
 import { Client } from '../'
 import { Message } from 'discord.js'
 
+// Exports
 export class CommandBase {
     public settings: CommandSettings
     public client: Client
