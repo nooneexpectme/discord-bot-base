@@ -21,7 +21,7 @@ export async function handleNewMessage(client: Client, message: Message): Promis
     // Switch error
     switch (request.error) {
         case CommandRequestError.UNDEFINED_COMMAND:
-            await message.channel.send({ embed: undefinedCommandEmbed(client, request) })
+            await message.channel.send({ embed: undefinedCommandEmbed(request) })
             break
         case CommandRequestError.NOT_ENOUGH_ARGS:
             await message.channel.send({ embed: notEnoughArgsEmbed(client.settings.prefix, message, request) })
