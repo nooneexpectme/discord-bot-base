@@ -1,25 +1,22 @@
 interface QueenDecimSettings {
-    token: string,
-    prefix: string,
-    ownerId?: string,
-    commands?: string[],
-    commandsAutoRegister?: boolean,
-    commandsAutoLoad?: boolean,
+    token: string
+    prefix: string
+    ownerId?: string
     throwErrorPM?: boolean
-}
-
-interface CommandRequest {
-    command: string,
-    arguments: string[]
-}
-
-interface CommandEntry {
-    name: string,
-    description: string,
-    instance: any
+    throwErrorChannel?: boolean
 }
 
 interface CommandSettings {
-    name: string,
+    name: string
+    group: string
     description: string
+    details?: string
+    args?: CommandSettingsParameter[]
+    ownerOnly?: boolean
+}
+
+interface CommandSettingsParameter {
+    name: string
+    type?: any,
+    validator?: (arg) => [boolean, string]
 }

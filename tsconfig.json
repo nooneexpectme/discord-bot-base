@@ -1,7 +1,7 @@
 {
     "compileOnSave": true,
     "include": [
-        "**/*"
+        "src/**/*"
     ],
     "compilerOptions": {
         "allowJs": true,
@@ -9,12 +9,14 @@
         "moduleResolution": "node",
         "watch": true,
         "removeComments": true,
-        "outDir": "../dist",
+        "outDir": "./dist",
         "target": "es2017",
-        "baseUrl": ".",
+        "baseUrl": "./src",
         "paths": {
             "@root/*": ["./*"],
-            "@utils/*": ["./utils/*"]
+            "@service/*": ["./service/*"],
+            "@model/*": ["./model/*"],
+            "@embed/*": ["./embed/*"]
         }
     }
 }

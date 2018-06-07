@@ -1,117 +1,50 @@
-// Register aliases
-import { addAliases as ModuleAliases } from "module-alias";
-ModuleAliases({
-    "@root": __dirname,
-    "@utils": __dirname + "/utils"
-})
-
 // Imports
-import * as DiscordJS from "discord.js";
-import Commands, { CommandModel } from "./commands";
-import { EventEmitter } from "events";
+import { EventEmitter } from 'events'
+import { Client as DJSClient, Message } from 'discord.js'
+import Registry from './registry'
+import Shared from './shared'
+import { handleBotError } from './service/handleBotError'
+import { handleBotReady } from './service/handleBotReady'
+import { handleNewMessage } from './service/handleNewMessage'
+import * as debug from 'debug'
+const log = debug('qd:main')
 
-import Logger, { Danger } from "@utils/logger";
-
-// Events const
-const Events = {
-    CONNECTED: "ServerConnected",
-    ERROR: "ServerError",
-    DISCONNECTED: "ServerDisconnected"
+// Exports
+export { CommandBase } from './model/CommandBase'
+export const Events = {
+    CONNECTED: 'ServerConnected',
+    ERROR: 'ServerError',
+    DISCONNECTED: 'ServerDisconnected'
 }
 
 // Client
-class Client {
-    public dispatcher: EventEmitter = new EventEmitter();
-    public settings: QueenDecimSettings;
-    public client: DiscordJS.Client = new DiscordJS.Client();
-    public commands: Commands;
+export class Client {
+    public dispatcher: EventEmitter = new EventEmitter()
+    public settings: QueenDecimSettings
+    public discord: DJSClient = new DJSClient()
+    public registry: Registry
+    public shared: Shared = new Shared()
 
-    constructor(settings: QueenDecimSettings){
-        // Save settings
-        this.settings = settings;
-        this.commands = new Commands(this);
+    constructor(settings: QueenDecimSettings) {
+        this.settings = settings
+        this.registry = new Registry(this)
+        this.listenEvents()
+    }
 
-        // Handle main messages
-        this.client.on("ready", () => this.handleBotReady().catch(this.handleBotError.bind(this)));
-        this.client.on("message", message => {
-            this.handleNewMessage(message)
+    public logIn(): Promise<string> { return this.discord.login(this.settings.token) }
+    public logOut(): Promise<void> { return this.discord.destroy() }
+
+    private listenEvents(): void {
+        log('Listen events.')
+        this.discord.on('ready', () => handleBotReady(this).catch(error => handleBotError(this, error)))
+        this.discord.on('message', message => {
+            handleNewMessage(this, message)
             .then(isCommand => {
-                if(isCommand)
-                    Logger(`The previous command has been executed.`);
+                if (isCommand)
+                    log(`The previous command has been executed.`)
             })
-            .catch(error => this.handleBotError(error, message));
-        });
-        this.client.on("disconnect", () => this.dispatcher.emit(Events.DISCONNECTED));
-    }
-
-    public logIn(): Promise<string> { return this.client.login(this.settings.token); }
-    public logOut(): Promise<any> { return this.client.destroy(); }
-
-    private async handleBotError(error: any, message?: DiscordJS.Message){
-        Danger("An error has occured.");
-        this.dispatcher.emit(Events.ERROR, error);
-
-        // Throw error in PM
-        if(this.settings.throwErrorPM === false) return false;
-        let embed = new DiscordJS.RichEmbed()
-        .setColor("#C0392B")
-        .setFooter("See more details in console.")
-        .setTimestamp();
-            
-        if(this.settings.ownerId){
-            // Throw in PM
-            embed
-            .setTitle("Internal server error")
-            .setDescription(error);
-            await Promise.all([
-                this.client.users.get(this.settings.ownerId).send({ embed }),
-                message.channel.send("Thanks you, we just found a new error.")
-            ]);
-        } else {
-            // Warning in the server
-            Danger("Please, set-up the OWNER option or disable throwErrorPM.");
-            embed.addField("Warning", "If you are the owner of this bot, please set-up the `owner` option with your ID, if it's not you, please alert him.");
-            embed.addField("Error reported", "The error has been reported in the console.");
-            await message.channel.send({ embed });
-        }
-    }
-
-    private async handleBotReady(){
-        // Update bot settings
-        Logger("QueenDecim is ready to fire.");
-
-        // Register commands from settings
-        if(this.settings.commandsAutoRegister && this.settings.commands && this.settings.commands.length > 0){
-            Logger(this.settings.commands.length, "command(s) found.");            
-            await this.commands.register(this.settings.commands);
-            if(this.settings.commandsAutoLoad)
-                await this.commands.loadRegistry();
-        }
-
-        this.dispatcher.emit(Events.CONNECTED);
-        return true;
-    }
-
-    private async handleNewMessage(message: DiscordJS.Message): Promise<boolean> {
-        if(!this.commands.isRequestMessage(message.content)) return false;
-        
-        // Send loading message
-        let loading = <DiscordJS.Message>await message.channel.send("Please wait while i execute the command...");
-
-        // Execute the command
-        Logger("New command received", message.content);
-        let runState = await this.commands.run(message)
-        .catch(error => {
-            loading.delete();
-            throw new Error(error);
+            .catch(error => handleBotError(this, error, message))
         })
-        if(!runState) message.reply("the command seems unexistant... try again.");
-
-        // Return the command result
-        await loading.edit(`Command executed.`);
-        loading.delete(2500);
-        return true;
+        this.discord.on('disconnect', () => this.dispatcher.emit(Events.DISCONNECTED))
     }
 }
-
-export { DiscordJS, Client, CommandModel, Events };
