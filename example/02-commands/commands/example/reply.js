@@ -1,7 +1,7 @@
 const { CommandBase } = require('@tanuki/discord-bot-base')
 
 class ReplyCommand extends CommandBase {
-    constructor(client){
+    constructor (client) {
         super(client, {
             group: 'example',
             name: 'reply',
@@ -22,14 +22,14 @@ class ReplyCommand extends CommandBase {
         })
     }
 
-    async run(message, { text, nbr, display }){
-        console.log(`Reply "${text}" ${nbr} times (display: ${display ? 'true': 'false'}).`)
+    async run (message, { text, nbr, display }) {
+        console.log(`Reply "${text}" ${nbr} times (display: ${display ? 'true' : 'false'}).`)
         if (!display) return
         const replies = []
         for (let i = 0; i < nbr; i++) {
             replies.push(message.reply(text.toString()))
         }
-        return await Promise.all(replies)
+        return Promise.all(replies)
     }
 }
 

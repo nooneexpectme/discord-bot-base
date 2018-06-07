@@ -10,6 +10,6 @@ Promise.all([
 ]).then(() => {
     // Logging
     QueenDecim.logIn()
-    .then(() => console.log('Application done'))
-    .catch(console.error)
+        .then(() => console.log('Application done'))
+        .catch(console.error)
 })
