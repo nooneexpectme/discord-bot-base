@@ -1,7 +1,7 @@
 const { CommandBase } = require('@tanuki/discord-bot-base')
 
 class ReplyCommand extends CommandBase {
-    constructor (client) {
+    constructor(client) {
         super(client, {
             group: 'example',
             name: 'reply',
@@ -11,11 +11,7 @@ class ReplyCommand extends CommandBase {
                 {
                     name: 'nbr',
                     type: Number,
-                    validator: arg => {
-                        return arg > 5
-                            ? [ false, 'The maximum of replies are 5.' ]
-                            : [ true, null ]
-                    }
+                    validator: arg => arg > 5 ? [ false, 'The maximum of replies are 5.' ] : [ true, null ]
                 },
                 { name: 'display', type: Boolean }
             ]
