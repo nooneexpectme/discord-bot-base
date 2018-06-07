@@ -13,9 +13,9 @@ const DefaultCommands = [
 
 // Class
 export class RegistryCommand {
+    private client: Client
     private list: {[commandName: string]: CommandBase} = {}
     private pathsToCommand: {[path: string]: string} = {}
-    private client: Client
 
     public constructor(client: Client) {
         this.client = client
