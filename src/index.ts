@@ -2,7 +2,6 @@
 import { EventEmitter } from 'events'
 import { Client as DJSClient, Message } from 'discord.js'
 import Registry from './registry'
-import Shared from './shared'
 import { handleBotError } from './service/handleBotError'
 import { handleBotReady } from './service/handleBotReady'
 import { handleNewMessage } from './service/handleNewMessage'
