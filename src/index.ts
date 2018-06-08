@@ -23,7 +23,7 @@ export class Client {
     public settings: QueenDecimSettings
     public discord: DJSClient = new DJSClient()
     public registry: Registry
-    public shared: Shared = new Shared()
+    public shared: Map<string, any> = new Map()
 
     constructor(settings: QueenDecimSettings) {
         this.settings = settings
