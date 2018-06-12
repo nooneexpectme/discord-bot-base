@@ -15,11 +15,21 @@ module.exports = class HelpCommand extends CommandBase {
 
     public async run(msg: Message): Promise<void> {
         // Build the RichEmbed
-        const helpEmbed = new RichEmbed()
-            .addField('commands', this.client.registry.command.getNames())
+        const commandNames = this.client.registry.command.getNames()
+        const help = [
+            '**List of commands**',
+            'The list of available commands.',
+            '--------------',
+            null
+        ]
+
+        for (const commandName of commandNames) {
+            const command = this.client.registry.command.get(commandName)
+            help.push('**' + commandName + '** - ' + command.settings.description)
+        }
 
         // Send & delete
-        const promises = [ msg.author.send({ embed: helpEmbed }) ]
+        const promises = [ msg.author.send(help) ]
         if (msg.deletable) promises.push(msg.delete())
         await Promise.all(promises)
     }
