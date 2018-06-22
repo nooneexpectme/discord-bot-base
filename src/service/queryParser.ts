@@ -56,7 +56,7 @@ export function queryParser(
     const cmdArgs = { requestContent: reqArgs }
     if (Array.isArray(cmdInstance.settings.args)) {
         // Check if we have enough args
-        const optionalArgs = cmdInstance.settings.args.filter(arg => !arg.isOptional)
+        const optionalArgs = cmdInstance.settings.args.filter(arg => arg.isOptional)
         const argNbs = cmdInstance.settings.args.length
         const requiredArgsNb = argNbs - optionalArgs.length
 
