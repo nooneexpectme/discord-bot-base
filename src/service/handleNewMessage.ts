@@ -15,7 +15,7 @@ export async function handleNewMessage(client: Client, message: Message): Promis
     if (!message.content.startsWith(client.settings.prefix)) return false
 
     // Do the job
-    const request = queryParser(client, message)
+    const request = await queryParser(client, message)
     log('Command request (%o).', { request: message.content })
 
     // Switch error
