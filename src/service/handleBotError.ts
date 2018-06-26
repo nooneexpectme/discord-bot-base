@@ -12,19 +12,17 @@ export async function handleBotError(client: Client, error: any, message?: Messa
     client.dispatcher.emit(Events.ERROR, error)
 
     const submissions = []
-    submissions.push(
-        message.reply('sorry, i can\'t run you\'re command.')
-    )
+    submissions.push(message.reply('sorry, i can\'t run you\'re command.'))
 
     // Throw error in PM
     if (client.settings.throwErrorPM !== false) {
-        if (!client.settings.ownerId) submissions.push(message.channel.send({ embed: missingOwnerIdEmbed() }))
+        if (!client.settings.ownerIds.length) submissions.push(message.channel.send({ embed: missingOwnerIdEmbed() }))
         else {
-            submissions.push(
-                client.discord.users
-                    .get(client.settings.ownerId)
-                    .send({ embed: internalServerErrorEmbed(error) })
-            )
+            const embed = internalServerErrorEmbed(error)
+            for (const ownerId of client.settings.ownerIds) {
+                const PMSubmission = client.discord.users.get(ownerId).send({ embed })
+                submissions.push(PMSubmission)
+            }
         }
     }
 

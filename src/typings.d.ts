@@ -1,7 +1,7 @@
 interface QueenDecimSettings {
     token: string
     prefix: string
-    ownerId?: string
+    ownerIds?: string[]
     throwErrorPM?: boolean
     throwErrorChannel?: boolean
 }
