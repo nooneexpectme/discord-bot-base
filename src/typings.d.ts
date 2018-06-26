@@ -13,6 +13,7 @@ interface CommandSettings {
     details?: string
     args?: CommandSettingsParameter[]
     userIds?: string[]
+    channelIds?: string[]
 }
 
 interface CommandSettingsParameter {

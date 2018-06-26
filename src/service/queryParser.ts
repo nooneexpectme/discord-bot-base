@@ -46,8 +46,11 @@ export async function queryParser(
         return request
     }
 
-    // Setting: UserIds only
-    if (cmdInstance.settings.userIds && !cmdInstance.settings.userIds.includes(message.author.id)) {
+    // Setting: userIds, channelIds
+    const userNotAllowed = cmdInstance.settings.userIds && !cmdInstance.settings.userIds.includes(message.author.id)
+    const channelNotAllowed = cmdInstance.settings.channelIds && !cmdInstance.settings.channelIds.includes(message.channel.id)
+
+    if (userNotAllowed || channelNotAllowed) {
         request.error = CommandRequestError.NOT_ALLOWED
         return request
     }
