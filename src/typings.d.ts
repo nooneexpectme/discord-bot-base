@@ -12,7 +12,7 @@ interface CommandSettings {
     description: string
     details?: string
     args?: CommandSettingsParameter[]
-    ownerOnly?: boolean
+    userIds?: string[]
 }
 
 interface CommandSettingsParameter {

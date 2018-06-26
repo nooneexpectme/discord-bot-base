@@ -46,8 +46,8 @@ export async function queryParser(
         return request
     }
 
-    // Setting: OwnerOnly
-    if (cmdInstance.settings.ownerOnly && !client.settings.ownerIds.includes(message.author.id)) {
+    // Setting: UserIds only
+    if (cmdInstance.settings.userIds && !cmdInstance.settings.userIds.includes(message.author.id)) {
         request.error = CommandRequestError.NOT_ALLOWED
         return request
     }

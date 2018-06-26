@@ -12,7 +12,7 @@ module.exports = class EvalCommand extends CommandBase {
             group: 'default',
             name: 'eval',
             description: 'Evaluate a chunk of code',
-            ownerOnly: true
+            userIds: client.settings.ownerIds
         })
     }
 
