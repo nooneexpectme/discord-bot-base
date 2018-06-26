@@ -17,6 +17,8 @@ interface CommandSettings {
 
 interface CommandSettingsParameter {
     name: string
-    type?: any,
+    type?: any
     validator?: (arg) => [boolean, string]
+    isOptional?: boolean
+    default?: any
 }

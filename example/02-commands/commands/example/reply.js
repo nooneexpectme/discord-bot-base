@@ -13,7 +13,7 @@ class ReplyCommand extends CommandBase {
                     type: Number,
                     validator: arg => arg > 5 ? [ false, 'The maximum of replies are 5.' ] : [ true, null ]
                 },
-                { name: 'display', type: Boolean }
+                { name: 'display', type: Boolean, isOptional: true, default: true }
             ]
         })
     }

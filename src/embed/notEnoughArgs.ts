@@ -11,7 +11,9 @@ export function notEnoughArgsEmbed(prefix: string, message: Message, request: Co
         need: request.command.settings.args.map(a => a.name) || []
     })
 
-    const expected = '`' + prefix + request.command.settings.name + ' ' + request.command.settings.args.map(a => `<${a.name}>`).join(' ') + '`'
+    const expectedCmd = prefix + request.command.settings.name
+    const expectedArgs = request.command.settings.args.map(a => !a.isOptional ? `<${a.name}>` : `[${a.name}]`).join(' ')
+    const expected = `\`${expectedCmd + ' ' + expectedArgs}\``
     const actual = '`' + message.content + '`'
 
     return new RichEmbed()

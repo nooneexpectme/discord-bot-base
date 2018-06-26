@@ -17,10 +17,10 @@ export const regExpValidators = {
 }
 
 // Method
-export function queryParser(
+export async function queryParser(
     client: Client,
     message: Message
-): CommandRequest {
+): Promise<CommandRequest> {
     const request = new CommandRequest()
     const commandIdentifier = regExpValidators.commandIdentifier(
         client.settings.prefix,
@@ -56,23 +56,26 @@ export function queryParser(
     const cmdArgs = { requestContent: reqArgs }
     if (Array.isArray(cmdInstance.settings.args)) {
         // Check if we have enough args
-        if (cmdInstance.settings.args.length > reqArgsList.length) {
+        const optionalArgs = cmdInstance.settings.args.filter(arg => arg.isOptional)
+        const argNbs = cmdInstance.settings.args.length
+        const requiredArgsNb = argNbs - optionalArgs.length
+
+        if (requiredArgsNb > reqArgsList.length) {
             request.error = CommandRequestError.NOT_ENOUGH_ARGS
         } else {
             // Save and check args
-            for (let i = 0; i < cmdInstance.settings.args.length; i++) {
-                const arg = cmdInstance.settings.args[i]
-                const typedArg = arg.type(reqArgsList[i])
-                if (arg.validator) {
-                    const [isSuccess, errorMsg] = arg.validator(typedArg)
+            const checks = await Promise.all(cmdInstance.settings.args.map(async (arg, i) => {
+                const _arg = reqArgsList[i] || arg.default || null
+                const typedArg = await arg.type.bind(client)(_arg)
+                if (arg.validator && (arg.isOptional && _arg !== null && _arg !== arg.default)) {
+                    const [ isSuccess, errorMsg ] = await arg.validator.bind(client)(typedArg)
                     if (!isSuccess) {
                         request.error = CommandRequestError.INVALID_ARG
                         request.validatorError = errorMsg
-                        break
                     }
                 }
                 cmdArgs[arg.name] = typedArg
-            }
+            }))
         }
     }
 

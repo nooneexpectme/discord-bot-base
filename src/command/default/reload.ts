@@ -16,19 +16,21 @@ module.exports = class ReloadCommand extends CommandBase {
                     type: String,
                     validator: command => {
                         if (!this.client.registry.command.getPathFromName(command))
-                            return [false, 'You are asking for an unregistered command, type `!help` to see command list.']
+                            return [false, 'You are asking for an unregistered command, type `!help` to see the command list.']
                         return [true, null]
                     }
-                }
+                },
+                { name: 'silent', type: Boolean, isOptional: true, default: false }
             ]
         })
     }
 
-    public async run(msg: Message, { command }): Promise<void> {
+    public async run(msg: Message, { command, silent }): Promise<void> {
         const path = this.client.registry.command.getPathFromName(command)
         await this.client.registry.command.unregister(path)
         delete require.cache[require.resolve(path)]
         await this.client.registry.command.register(path)
-        await msg.react('✅')
+        if (!silent) await msg.react('✅')
+        else if (msg.deletable) await msg.delete()
     }
 }
