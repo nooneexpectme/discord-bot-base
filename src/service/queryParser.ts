@@ -46,11 +46,12 @@ export async function queryParser(
         return request
     }
 
-    // Setting: userIds, channelIds
+    // Setting: userIds, channelIds, roleIds
     const userNotAllowed = cmdInstance.settings.userIds && !cmdInstance.settings.userIds.includes(message.author.id)
     const channelNotAllowed = cmdInstance.settings.channelIds && !cmdInstance.settings.channelIds.includes(message.channel.id)
+    const roleNotAllowed = cmdInstance.settings.roleIds && (!message.member || !cmdInstance.settings.roleIds.filter(roleId => message.member.roles.has(roleId)).length)
 
-    if (userNotAllowed || channelNotAllowed) {
+    if (userNotAllowed || channelNotAllowed || roleNotAllowed) {
         request.error = CommandRequestError.NOT_ALLOWED
         return request
     }

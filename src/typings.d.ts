@@ -14,6 +14,7 @@ interface CommandSettings {
     args?: CommandSettingsParameter[]
     userIds?: string[]
     channelIds?: string[]
+    roleIds?: string[]
 }
 
 interface CommandSettingsParameter {
