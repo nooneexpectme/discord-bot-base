@@ -67,7 +67,7 @@ export async function queryParser(
             const checks = await Promise.all(cmdInstance.settings.args.map(async (arg, i) => {
                 const _arg = reqArgsList[i] || arg.default || null
                 const typedArg = await arg.type.bind(client)(_arg)
-                if (arg.validator && (arg.isOptional && _arg !== null && _arg !== arg.default)) {
+                if (arg.validator) {
                     const [ isSuccess, errorMsg ] = await arg.validator.bind(client)(typedArg)
                     if (!isSuccess) {
                         request.error = CommandRequestError.INVALID_ARG
