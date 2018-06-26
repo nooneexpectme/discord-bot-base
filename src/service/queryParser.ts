@@ -64,19 +64,18 @@ export async function queryParser(
             request.error = CommandRequestError.NOT_ENOUGH_ARGS
         } else {
             // Save and check args
-            for (let i = 0; i < argNbs; i++) {
-                const arg = cmdInstance.settings.args[i]
-                const typedArg = await arg.type.bind(client)(reqArgsList[i] || arg.default)
-                if (arg.validator) {
-                    const [isSuccess, errorMsg] = await arg.validator.bind(client)(typedArg)
+            const checks = await Promise.all(cmdInstance.settings.args.map(async (arg, i) => {
+                const _arg = reqArgsList[i] || arg.default || null
+                const typedArg = await arg.type.bind(client)(_arg)
+                if (arg.validator && (arg.isOptional && _arg !== null && _arg !== arg.default)) {
+                    const [ isSuccess, errorMsg ] = await arg.validator.bind(client)(typedArg)
                     if (!isSuccess) {
                         request.error = CommandRequestError.INVALID_ARG
                         request.validatorError = errorMsg
-                        break
                     }
                 }
                 cmdArgs[arg.name] = typedArg
-            }
+            }))
         }
     }
 
