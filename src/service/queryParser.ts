@@ -70,6 +70,7 @@ export async function queryParser(
             // Save and check args
             const checks = await Promise.all(cmdInstance.settings.args.map(async (arg, i) => {
                 const _arg = reqArgsList[i] || arg.default || null
+                if (_arg === null && arg.isOptional) return
                 const typedArg = await arg.type.bind(client)(_arg)
                 if (arg.validator) {
                     const [ isSuccess, errorMsg ] = await arg.validator.bind(client)(typedArg)
