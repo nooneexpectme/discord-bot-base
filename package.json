@@ -1,6 +1,6 @@
 {
     "name": "@tanuki/discord-bot-base",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "description": "Discord's bot base based on discordjs with modular commands system.",
     "keywords": [
         "discord",
