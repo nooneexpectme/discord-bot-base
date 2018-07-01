@@ -69,11 +69,11 @@ export async function queryParser(
         } else {
             // Save and check args
             const checks = await Promise.all(cmdInstance.settings.args.map(async (arg, i) => {
-                const _arg = reqArgsList[i] || arg.default || null
-                if (_arg === null && arg.isOptional) return
-                const typedArg = await arg.type.bind(client)(_arg)
+                const _arg = reqArgsList[i] || arg.default
+                if (_arg === undefined && arg.isOptional) return
+                const typedArg = await arg.type.call(client, _arg)
                 if (arg.validator) {
-                    const [ isSuccess, errorMsg ] = await arg.validator.bind(client)(typedArg)
+                    const [ isSuccess, errorMsg ] = await arg.validator.call(client, typedArg)
                     if (!isSuccess) {
                         request.error = CommandRequestError.INVALID_ARG
                         request.validatorError = errorMsg
