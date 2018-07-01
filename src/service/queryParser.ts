@@ -11,7 +11,7 @@ import { CommandRequest, CommandRequestError } from '../model/CommandRequest'
 
 // Exports regular expression validators
 export const regExpValidators = {
-    commandIdentifier: (prefix, names) => new RegExp(`^${prefix}(${names.join('|')})\s?(.+)?`),
+    commandIdentifier: (prefix, names) => new RegExp(`^${prefix}(${names.sort((a, b) => a.length < b.length).join('|')})\s?(.+)?`),
     retrieveArgs: new RegExp(/"[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*'|```((.|\s)*?)```|\S+/g),
     escapeQuotes: new RegExp(/^"|"$|^'|'$|^```(\S*\n?)|```$/g)
 }
