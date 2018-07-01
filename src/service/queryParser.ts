@@ -11,7 +11,7 @@ import { CommandRequest, CommandRequestError } from '../model/CommandRequest'
 
 // Exports regular expression validators
 export const regExpValidators = {
-    commandIdentifier: (prefix, names) => new RegExp(`^${prefix}(${names.join('|')})\s?(.+)?`),
+    commandIdentifier: (prefix, names) => new RegExp(`^${prefix}(${names.sort((a, b) => b.length - a.length).join('|')})\s?(.+)?`),
     retrieveArgs: new RegExp(/"[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*'|```((.|\s)*?)```|\S+/g),
     escapeQuotes: new RegExp(/^"|"$|^'|'$|^```(\S*\n?)|```$/g)
 }
@@ -46,8 +46,12 @@ export async function queryParser(
         return request
     }
 
-    // Setting: OwnerOnly
-    if (cmdInstance.settings.ownerOnly && message.author.id !== client.settings.ownerId) {
+    // Setting: userIds, channelIds, roleIds
+    const userNotAllowed = cmdInstance.settings.userIds && !cmdInstance.settings.userIds.includes(message.author.id)
+    const channelNotAllowed = cmdInstance.settings.channelIds && !cmdInstance.settings.channelIds.includes(message.channel.id)
+    const roleNotAllowed = cmdInstance.settings.roleIds && (!message.member || !cmdInstance.settings.roleIds.filter(roleId => message.member.roles.has(roleId)).length)
+
+    if (userNotAllowed || channelNotAllowed || roleNotAllowed) {
         request.error = CommandRequestError.NOT_ALLOWED
         return request
     }
@@ -66,8 +70,9 @@ export async function queryParser(
             // Save and check args
             const checks = await Promise.all(cmdInstance.settings.args.map(async (arg, i) => {
                 const _arg = reqArgsList[i] || arg.default || null
+                if (_arg === null && arg.isOptional) return
                 const typedArg = await arg.type.bind(client)(_arg)
-                if (arg.validator && (arg.isOptional && _arg !== null && _arg !== arg.default)) {
+                if (arg.validator) {
                     const [ isSuccess, errorMsg ] = await arg.validator.bind(client)(typedArg)
                     if (!isSuccess) {
                         request.error = CommandRequestError.INVALID_ARG

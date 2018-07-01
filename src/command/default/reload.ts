@@ -21,7 +21,8 @@ module.exports = class ReloadCommand extends CommandBase {
                     }
                 },
                 { name: 'silent', type: Boolean, isOptional: true, default: false }
-            ]
+            ],
+            userIds: client.settings.ownerIds
         })
     }
 

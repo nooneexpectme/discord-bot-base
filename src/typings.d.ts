@@ -1,7 +1,7 @@
 interface QueenDecimSettings {
     token: string
     prefix: string
-    ownerId?: string
+    ownerIds?: string[]
     throwErrorPM?: boolean
     throwErrorChannel?: boolean
 }
@@ -12,7 +12,9 @@ interface CommandSettings {
     description: string
     details?: string
     args?: CommandSettingsParameter[]
-    ownerOnly?: boolean
+    userIds?: string[]
+    channelIds?: string[]
+    roleIds?: string[]
 }
 
 interface CommandSettingsParameter {
