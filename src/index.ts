@@ -35,14 +35,15 @@ export class Client {
 
     private listenEvents(): void {
         log('Listen events.')
-        this.discord.on('ready', () => handleBotReady(this).catch(error => handleBotError(this, error)))
+        this.discord.on('ready', () => handleBotReady(this).catch(error => handleBotError(this, error).catch(console.error)))
+        this.discord.on('error', error => handleBotError(this, error).catch(console.error))
         this.discord.on('message', message => {
             handleNewMessage(this, message)
             .then(isCommand => {
                 if (isCommand)
                     log(`The previous command has been executed.`)
             })
-            .catch(error => handleBotError(this, error, message))
+            .catch(error => handleBotError(this, error, message).catch(console.error))
         })
         this.discord.on('disconnect', () => this.dispatcher.emit(Events.DISCONNECTED))
     }
