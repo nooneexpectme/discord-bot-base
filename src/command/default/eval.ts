@@ -20,7 +20,7 @@ module.exports = class EvalCommand extends CommandBase {
         /* tslint:disable:no-eval */
         let execution: any = eval(requestContent)
         if (execution instanceof Promise) execution = await execution
-        if (typeof execution !== 'object') await msg.channel.send(execution)
+        if (execution && typeof execution !== typeof null) await msg.channel.send(execution)
         else if (execution) log('%O', execution)
         /* tslint:enable:no-eval */
     }
